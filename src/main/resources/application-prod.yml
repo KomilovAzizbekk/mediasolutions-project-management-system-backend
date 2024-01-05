@@ -1,0 +1,45 @@
+server:
+  port: 8899
+spring:
+  main:
+    allow-circular-references: false
+  servlet:
+    multipart:
+      max-file-size: 30MB
+      max-request-size: 30MB
+  datasource:
+    url: jdbc:postgresql://localhost:5432/back_crm
+    username: school_rank
+    password: 57246Abs
+  jpa:
+    show-sql: true
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        enable_lazy_load_no_trans: true
+        jdbc:
+          lob:
+            non_contextual_creation: true
+  sql:
+    init:
+      mode: always
+
+
+#logging:
+#  pattern:
+#    file: "%d{yyyy-MM-dd HH:mm:ss} - %msg%n"
+#  file:
+#    name: logs/school-rank.log
+#  level:
+#    org.springframework.web: ERROR
+#    uz.schoolrank.schoolrank: ERROR
+#    org.hibernate: ERROR
+
+
+app:
+  jwt:
+    access:
+      token:
+        key: "--9w5e-2fe-f2-wf4-f.f5-wef.s.65fwaa.5f%^&@#$2"
+        expiration-in-ms: 43200000
