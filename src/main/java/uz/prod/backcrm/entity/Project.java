@@ -9,6 +9,7 @@ import uz.prod.backcrm.entity.template.AbsUUID;
 
 import javax.persistence.*;
 import java.sql.Timestamp;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Getter
@@ -57,7 +58,7 @@ public class Project extends AbsUUID {
     private List<Task> tasks;
 
     @Column(nullable = false, name = "deadline")
-    private Timestamp deadline;
+    private LocalDateTime deadline;
 
     @Column(nullable = false, name = "project_type")
     private String type;

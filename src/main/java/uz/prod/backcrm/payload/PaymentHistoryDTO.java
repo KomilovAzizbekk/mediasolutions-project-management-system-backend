@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.sql.Timestamp;
+import java.time.LocalDateTime;
 import java.util.UUID;
 
 @AllArgsConstructor
@@ -18,6 +19,6 @@ public class PaymentHistoryDTO {
 
     private Double sum;
 
-    private Timestamp dateTime;
+    private LocalDateTime dateTime;
 
 }

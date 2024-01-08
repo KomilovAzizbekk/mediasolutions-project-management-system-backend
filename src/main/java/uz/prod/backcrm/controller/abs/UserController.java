@@ -21,7 +21,7 @@ public interface UserController {
     String ME = "me";
     String GET_ALL_USERS_OR_ADMINS = "all-users-or-admins";
     String EDIT_ME = "edit-me";
-    String EDIT_BY_ADMIN = "edit/{id}";
+    String EDIT_BY_ADMIN = "edit/{id}/{roleId}";
     String DELETE_ME = "delete-me";
     String BLOCK = "block/{id}";
     String UNBLOCK = "unblock/{id}";
@@ -60,16 +60,16 @@ public interface UserController {
 
     @PutMapping(EDIT_ME)
     @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_PM', 'ROLE_PROGRAMMER', 'ROLE_USER')")
-    ApiResult<?> editProfile(ProfileDTO profileDTO);
+    ApiResult<?> editProfile(@CurrentUser User user, @Valid @RequestBody ProfileDTO profileDTO);
 
     //FAQAT USERLARNI ROLINI ALMASHTIRA OLADI
     @PutMapping(EDIT_BY_ADMIN)
     @PreAuthorize("hasRole('ROLE_ADMIN')")
-    ApiResult<?> editByAdmin(@CurrentUser User me, @PathVariable UUID id, @Valid @RequestBody RoleDTO roleDTO);
+    ApiResult<?> editByAdmin(@CurrentUser User me, @PathVariable UUID id, @PathVariable Long roleId);
 
     @DeleteMapping(DELETE_ME)
     @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_PM', 'ROLE_PROGRAMMER', 'ROLE_USER')")
-    ApiResult<?> deleteProfile();
+    ApiResult<?> deleteProfile(@CurrentUser User user);
 
 
 }

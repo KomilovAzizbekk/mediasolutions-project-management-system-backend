@@ -50,17 +50,17 @@ public class UserControllerImpl implements UserController {
     }
 
     @Override
-    public ApiResult<?> editProfile(ProfileDTO profileDTO) {
-        return userService.editProfile(profileDTO);
+    public ApiResult<?> editProfile(User user, ProfileDTO profileDTO) {
+        return userService.editProfile(user, profileDTO);
     }
 
     @Override
-    public ApiResult<?> editByAdmin(User me, UUID id, RoleDTO roleDTO) {
-        return userService.editByAdmin(me, id, roleDTO);
+    public ApiResult<?> editByAdmin(User me, UUID id, Long roleId) {
+        return userService.editByAdmin(me, id, roleId);
     }
 
     @Override
-    public ApiResult<?> deleteProfile() {
-        return userService.deleteProfile();
+    public ApiResult<?> deleteProfile(User user) {
+        return userService.deleteProfile(user);
     }
 }

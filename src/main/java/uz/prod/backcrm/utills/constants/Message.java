@@ -17,6 +17,9 @@ public interface Message {
     String ERROR = "error";
     String CANNOT_BLOCK = "cannot.block";
     String CANNOT_EDIT = "cannot.edit";
+    String FORBIDDEN_EXCEPTION = "forbidden.exception";
+    String PATH_NOT_FOUND_EXCEPTION = "path.not.found";
+    String SERVER_ERROR = "server.error";
 }
 
 

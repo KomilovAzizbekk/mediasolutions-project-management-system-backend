@@ -9,6 +9,7 @@ import uz.prod.backcrm.entity.template.AbsUUID;
 
 import javax.persistence.*;
 import java.sql.Timestamp;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Getter
@@ -36,7 +37,7 @@ public class Task extends AbsUUID {
     private List<User> users;
 
     @Column(name = "deadline")
-    private Timestamp deadline;
+    private LocalDateTime deadline;
 
     @ManyToMany(fetch = FetchType.LAZY)
     private List<Filee> files;

@@ -11,6 +11,8 @@ import java.util.UUID;
 
 public interface UserRepository extends JpaRepository<User, UUID> {
 
+     boolean existsByUsername(String username);
+
      @Query(nativeQuery = true, value = "select * from users u where u.role_id!=1")
      Page<User> findAllUsers(Pageable pageable);
 
@@ -25,13 +27,9 @@ public interface UserRepository extends JpaRepository<User, UUID> {
 
      Optional<User> findByIdAndEnabledIsTrueAndAccountNonExpiredIsTrueAndCredentialsNonExpiredIsTrueAndAccountNonLockedIsTrue(UUID userId);
 
-//     Page<User> findAllByAccountNonLockedIsTrue(Pageable pageable);
-
      Page<User> findAllByAccountNonLockedIsTrueAndRoleId(Pageable pageable, Long role_id);
 
      Page<User> findAllByAccountNonLockedIsTrueAndRoleIdNot(Pageable pageable, Long role_id);
-
-//     Page<User> findAllByAccountNonLockedIsFalse(Pageable pageable);
 
      Page<User> findAllByAccountNonLockedIsFalseAndRoleId(Pageable pageable, Long role_id);
 

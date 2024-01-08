@@ -1,12 +1,12 @@
 package uz.prod.backcrm.payload;
 
-import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.sql.Timestamp;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 
@@ -38,12 +38,10 @@ public class ProjectDTO {
 
     private List<TaskDTO> taskDTOS;
 
-    private Timestamp deadline;
+    private LocalDateTime deadline;
 
     private String type;
 
     private List<PaymentDTO> paymentDTOS;
-
-    private Timestamp createdAt;
 
 }

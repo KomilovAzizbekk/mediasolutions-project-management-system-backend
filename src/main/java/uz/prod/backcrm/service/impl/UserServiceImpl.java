@@ -2,7 +2,6 @@ package uz.prod.backcrm.service.impl;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.MessageSource;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
@@ -11,11 +10,10 @@ import uz.prod.backcrm.entity.Role;
 import uz.prod.backcrm.entity.User;
 import uz.prod.backcrm.exceptions.RestException;
 import uz.prod.backcrm.manual.ApiResult;
-import uz.prod.backcrm.mapper.RoleMapper;
 import uz.prod.backcrm.mapper.UserMapper;
 import uz.prod.backcrm.payload.ProfileDTO;
-import uz.prod.backcrm.payload.RoleDTO;
 import uz.prod.backcrm.payload.UserDTO;
+import uz.prod.backcrm.repository.RoleRepository;
 import uz.prod.backcrm.repository.UserRepository;
 import uz.prod.backcrm.service.abs.UserService;
 import uz.prod.backcrm.utills.CommonUtils;
@@ -30,7 +28,7 @@ public class UserServiceImpl implements UserService {
 
     private final UserMapper userMapper;
     private final UserRepository userRepository;
-    private final RoleMapper roleMapper;
+    private final RoleRepository roleRepository;
     private final MessageSource messageSource;
 
     @Override
@@ -90,8 +88,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public ApiResult<?> editProfile(ProfileDTO dto) {
-        User user = CommonUtils.getUserFromRequest();
+    public ApiResult<?> editProfile(User user, ProfileDTO dto) {
         user.setUsername(dto.getUsername());
         user.setFirstName(dto.getFirstName());
         user.setLastName(dto.getLastName());
@@ -101,7 +98,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public ApiResult<?> editByAdmin(User me, UUID id, RoleDTO roleDTO) {
+    public ApiResult<?> editByAdmin(User me, UUID id, Long roleId) {
         String message = CommonUtils.createMessage(Message.NOT_FOUND, messageSource, new Object[]{id});
         User user = userRepository.findById(id).orElseThrow(
                 () -> RestException.restThrow(message, HttpStatus.BAD_REQUEST));
@@ -109,15 +106,17 @@ public class UserServiceImpl implements UserService {
             throw RestException.restThrow(CommonUtils.createMessage(Message.CANNOT_EDIT,
                     messageSource, null), HttpStatus.CONFLICT);
         }
-        user.setRole(roleMapper.toEntity(roleDTO));
+        Role role = roleRepository.findById(roleId).orElseThrow(
+                () -> RestException.restThrow(message, HttpStatus.BAD_REQUEST));
+        user.setRole(role);
         userRepository.save(user);
         return ApiResult.success(CommonUtils.createMessage(Message.UPDATED_SUCCESSFULLY, messageSource, new Object[]{id}));
     }
 
     @Override
-    public ApiResult<?> deleteProfile() {
+    public ApiResult<?> deleteProfile(User user) {
         try {
-            userRepository.deleteById(CommonUtils.getUserFromRequest().getId());
+            userRepository.deleteById(user.getId());
             return ApiResult.success(CommonUtils.createMessage(Message.DELETED_SUCCESSFULLY,
                     messageSource, new Object[]{null}));
         } catch (Exception e) {

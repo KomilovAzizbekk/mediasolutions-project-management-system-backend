@@ -5,7 +5,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.sql.Timestamp;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 
@@ -23,10 +23,8 @@ public class TaskDTO {
 
     private List<UserDTO> userDTOS;
 
-    private Timestamp deadline;
+    private LocalDateTime deadline;
 
     private List<FileDTO> fileDTOS;
-
-    private Timestamp createdAt;
 
 }

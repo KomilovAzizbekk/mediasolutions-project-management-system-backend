@@ -107,8 +107,9 @@ public class AuthServiceImpl implements AuthService, UserDetailsService {
 
     private void usernameNotFoundThrow(String username){
         String message = CommonUtils.createMessage(Message.USERNAME_NOT_FOUND, messageSource, new Object[]{username});
-        if (userRepository.findByUsername(username).isEmpty())
+        if (!userRepository.existsByUsername(username)) {
             throw RestException.restThrow(message, HttpStatus.FORBIDDEN);
+        }
     }
 
     public void checkPasswordEqualityIfErrorThrow(String password, String prePassword) {

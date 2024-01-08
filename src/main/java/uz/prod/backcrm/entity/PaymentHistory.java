@@ -10,6 +10,7 @@ import uz.prod.backcrm.entity.template.AbsUUID;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import java.sql.Timestamp;
+import java.time.LocalDateTime;
 
 @Getter
 @Setter
@@ -29,6 +30,6 @@ public class PaymentHistory extends AbsUUID {
     private Double sum;
 
     @Column(nullable = false, name = "date_time")
-    private Timestamp dateTime;
+    private LocalDateTime dateTime;
 
 }

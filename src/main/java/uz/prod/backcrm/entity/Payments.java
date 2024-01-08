@@ -9,6 +9,7 @@ import uz.prod.backcrm.entity.template.AbsUUID;
 
 import javax.persistence.*;
 import java.sql.Timestamp;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Getter
@@ -32,7 +33,7 @@ public class Payments extends AbsUUID {
     private Double sum;
 
     @Column(nullable = false, name = "repetition_period")
-    private Timestamp repetitionPeriod;
+    private LocalDateTime repetitionPeriod;
 
     @OneToMany(fetch = FetchType.LAZY)
     private List<PaymentHistory> paymentHistories;

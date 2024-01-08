@@ -24,10 +24,10 @@ public interface UserService {
 
     ApiResult<?> unblockUser(UUID id);
 
-    ApiResult<?> editProfile(ProfileDTO dto);
+    ApiResult<?> editProfile(User user, ProfileDTO dto);
 
-    ApiResult<?> editByAdmin(User me, UUID id, RoleDTO roleDTO);
+    ApiResult<?> editByAdmin(User me, UUID id, Long roleId);
 
-    ApiResult<?> deleteProfile();
+    ApiResult<?> deleteProfile(User user);
 
 }
