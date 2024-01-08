@@ -1,6 +1,7 @@
 package uz.prod.backcrm.controller.abs;
 
 import io.swagger.annotations.Api;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import uz.prod.backcrm.entity.Task;
 import uz.prod.backcrm.manual.ApiResult;
@@ -18,27 +19,41 @@ public interface TaskController {
 
     String GET_BY_ID = "{id}";
 
-    String GET_P_ID = "by-project/{id}";
+    String GET_BY_PROJECT_ID = "by-project/{id}";
+
+    String GET_MY_TASKS = "my-tasks";
+
+    String ADD = "add";
 
     String EDIT = "edit/{id}";
 
     String DELETE = "delete/{id}";
 
     @GetMapping(GET_BY_ID)
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_PM', 'ROLE_PROGRAMMER')")
     ApiResult<TaskDTO> getTaskById(@PathVariable UUID id);
 
-    @GetMapping(GET_P_ID)
+    @GetMapping(GET_BY_PROJECT_ID)
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_PM')")
     ApiResult<List<TaskDTO>> getAllTasksByProjectId(@PathVariable UUID id,
                                                     @RequestParam(defaultValue = Rest.DEFAULT_PAGE_NUMBER) int page,
                                                     @RequestParam(defaultValue = Rest.DEFAULT_PAGE_SIZE) int size);
 
-    @PostMapping
+    @GetMapping(GET_MY_TASKS)
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_PM', 'ROLE_PROGRAMMER')")
+    ApiResult<List<TaskDTO>> getAllMyTasks(@RequestParam(defaultValue = Rest.DEFAULT_PAGE_NUMBER) int page,
+                                           @RequestParam(defaultValue = Rest.DEFAULT_PAGE_SIZE) int size);
+
+    @PostMapping(ADD)
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_PM')")
     ApiResult<?> addTask(@Valid @RequestBody TaskDTO taskDTO);
 
     @PutMapping(EDIT)
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_PM')")
     ApiResult<?> editTask(@PathVariable UUID id, @Valid @RequestBody TaskDTO taskDTO);
 
     @DeleteMapping(DELETE)
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_PM')")
     ApiResult<?> deleteTask(@PathVariable UUID id);
 
 

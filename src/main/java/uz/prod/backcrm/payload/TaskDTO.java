@@ -1,6 +1,5 @@
 package uz.prod.backcrm.payload;
 
-import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -22,10 +21,12 @@ public class TaskDTO {
 
     private StatusDTO statusDTO;
 
-    private List<UserDTO> responsibleUsers;
+    private List<UserDTO> userDTOS;
 
     private Timestamp deadline;
 
-    private List<AttachmentDTO> attachmentDTOList;
+    private List<FileDTO> fileDTOS;
+
+    private Timestamp createdAt;
 
 }

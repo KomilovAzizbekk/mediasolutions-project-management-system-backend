@@ -1,5 +1,5 @@
 server:
-  port: 8080
+  port: 8090
 spring:
   servlet:
     multipart:
@@ -7,6 +7,7 @@ spring:
       max-request-size: 30MB
   main:
     allow-circular-references: false
+    allow-bean-definition-overriding: true
   datasource:
     url: jdbc:postgresql://localhost:5432/back_crm
     username: postgres

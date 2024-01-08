@@ -1,8 +1,8 @@
 package uz.prod.backcrm.utills;
 
-import org.springframework.beans.factory.annotation.Autowired;
+
+import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
-import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -10,10 +10,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 import uz.prod.backcrm.entity.User;
-import uz.prod.backcrm.exceptions.RestException;
-import uz.prod.backcrm.repository.UserRepository;
 import uz.prod.backcrm.secret.JwtAuthFilter;
-import uz.prod.backcrm.utills.constants.Message;
 import uz.prod.backcrm.utills.constants.Rest;
 
 
@@ -43,11 +40,9 @@ public class CommonUtils {
         SecurityContextHolder.getContext().setAuthentication(new UsernamePasswordAuthenticationToken(user, null, new ArrayList<>()));
     }
 
-    public static String getLocaleLanguage() {
+    public static String createMessage(String mes, MessageSource messageSource, Object[] objects) {
         Locale locale = LocaleContextHolder.getLocale();
-        String language = locale.getLanguage();
-
-        return language == null ? "" : language;
+        return messageSource.getMessage(mes, objects, locale);
     }
 
 

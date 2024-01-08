@@ -3,29 +3,29 @@ package uz.prod.backcrm.mapper;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.Mappings;
-import uz.prod.backcrm.entity.Attachment;
-import uz.prod.backcrm.payload.AttachmentDTO;
+import uz.prod.backcrm.entity.Filee;
+import uz.prod.backcrm.payload.FileDTO;
 
 import java.util.List;
 
 @Mapper(componentModel = "spring")
-public interface AttachmentMapper {
+public interface FileMapper {
 
     @Mappings({
             @Mapping(target = "url", source = "fileName"),
             @Mapping(target = "name", source = "originalName")
     })
-    AttachmentDTO toAttachmentDTO(Attachment attachment);
+    FileDTO toDTO(Filee filee);
 
     @Mappings({
             @Mapping(target = "fileName", source = "url"),
             @Mapping(target = "originalName", source = "name")
     })
-    Attachment toEntity(AttachmentDTO dto);
+    Filee toEntity(FileDTO dto);
 
     @Mappings({
             @Mapping(target = "fileName", source = "url"),
             @Mapping(target = "originalName", source = "name")
     })
-    List<Attachment> toEntityList(List<AttachmentDTO> dtoList);
+    List<Filee> toEntityList(List<FileDTO> dtoList);
 }

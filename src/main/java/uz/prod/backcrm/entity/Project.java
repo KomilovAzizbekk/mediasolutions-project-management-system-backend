@@ -31,9 +31,14 @@ public class Project extends AbsUUID {
     @ManyToOne(fetch = FetchType.LAZY)
     private Status status;
 
-    //KLENT ISMI
-    @OneToOne(fetch = FetchType.LAZY)
-    private Client client;
+    @Column(nullable = false, name = "client_name")
+    private String clientName;
+
+    @Column(nullable = false, name = "client_phone_1")
+    private String clientPhone1;
+
+    @Column(name = "client_phone_2")
+    private String clientPhone2;
 
     @Column(name = "description")
     private String description;

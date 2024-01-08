@@ -6,6 +6,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.sql.Timestamp;
 import java.util.List;
 import java.util.UUID;
 
@@ -17,10 +18,12 @@ public class PaymentDTO {
 
     private UUID id;
 
-    private PaymentTypeDTO paymentTypeDTO;
+    private String type;
 
     private Double sum;
 
-    private List<PaymentHistoryDTO> paymentHistoryDTOList;
+    private Timestamp repetitionPeriod;
+
+    private List<PaymentHistoryDTO> paymentHistoryDTOS;
 
 }

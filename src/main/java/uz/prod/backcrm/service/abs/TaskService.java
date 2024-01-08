@@ -12,6 +12,8 @@ public interface TaskService {
 
     ApiResult<List<TaskDTO>> getAllTasksByProjectId(UUID id, int page, int size);
 
+    ApiResult<List<TaskDTO>> getAllMyTasks(int page, int size);
+
     ApiResult<?> addTask(TaskDTO taskDTO);
 
 
@@ -19,6 +21,5 @@ public interface TaskService {
 
 
     ApiResult<?> deleteTask(UUID id);
-
 
 }

@@ -1,5 +1,6 @@
 package uz.prod.backcrm.controller.abs;
 
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import uz.prod.backcrm.manual.ApiResult;
 import uz.prod.backcrm.payload.ProjectDTO;
@@ -16,24 +17,40 @@ public interface ProjectController {
 
     String GET_BY_ID = "{id}";
 
+    String GET_ALL = "all";
+
+    String GET_MY_PROJECTS = "my-projects";
+
+    String ADD = "add";
+
     String EDIT = "edit/{id}";
 
     String DELETE = "delete/{id}";
 
     @GetMapping(GET_BY_ID)
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_PM', 'ROLE_PROGRAMMER')")
     ApiResult<ProjectDTO> getProjectById(@PathVariable UUID id);
 
-    @GetMapping
+    @GetMapping(GET_ALL)
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     ApiResult<List<ProjectDTO>> getAllProjects(@RequestParam(defaultValue = Rest.DEFAULT_PAGE_NUMBER) int page,
                                                @RequestParam(defaultValue = Rest.DEFAULT_PAGE_SIZE) int size);
 
-    @PostMapping
+    @GetMapping(GET_MY_PROJECTS)
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_PM', 'ROLE_PROGRAMMER')")
+    ApiResult<List<ProjectDTO>> getMyProjects(@RequestParam(defaultValue = Rest.DEFAULT_PAGE_NUMBER) int page,
+                                               @RequestParam(defaultValue = Rest.DEFAULT_PAGE_SIZE) int size);
+
+    @PostMapping(ADD)
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     ApiResult<?> addProject(@Valid @RequestBody ProjectDTO projectDTO);
 
     @PutMapping(EDIT)
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     ApiResult<?> editProject(@PathVariable UUID id, @Valid @RequestBody ProjectDTO projectDTO);
 
     @DeleteMapping(DELETE)
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     ApiResult<?> deleteProject(@PathVariable UUID id);
 
 

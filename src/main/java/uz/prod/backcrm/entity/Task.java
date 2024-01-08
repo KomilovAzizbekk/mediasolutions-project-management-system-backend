@@ -31,13 +31,14 @@ public class Task extends AbsUUID {
     @ManyToOne(fetch = FetchType.LAZY)
     private Status status;
 
+    //RESPONSIBLE USERS
     @OneToMany(fetch = FetchType.LAZY)
-    private List<User> responsibleUsers;
+    private List<User> users;
 
     @Column(name = "deadline")
     private Timestamp deadline;
 
     @ManyToMany(fetch = FetchType.LAZY)
-    private List<Attachment> attachmentList;
+    private List<Filee> files;
 
 }

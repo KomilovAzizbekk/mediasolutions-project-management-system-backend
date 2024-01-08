@@ -1,11 +1,18 @@
 package uz.prod.backcrm.utills.constants;
 
+import uz.prod.backcrm.controller.abs.AuthController;
+
 import java.util.HashMap;
 
 public interface Rest {
 
     String[] OPEN_PAGES_FOR_ALL_METHOD = {
-            "/**"
+//            "/swagger-ui/**",
+//            "/swagger-resources/**",
+//            "/swagger-ui.html",
+//            "/webjars/**",
+            AuthController.AUTH + "**"
+
     };
 
     String AUTHORIZATION_HEADER = "Authorization";

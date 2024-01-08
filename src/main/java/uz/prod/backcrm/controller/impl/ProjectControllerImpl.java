@@ -27,6 +27,11 @@ public class ProjectControllerImpl implements ProjectController {
     }
 
     @Override
+    public ApiResult<List<ProjectDTO>> getMyProjects(int page, int size) {
+        return projectService.getMyProjects(page, size);
+    }
+
+    @Override
     public ApiResult<?> addProject(ProjectDTO projectDTO) {
         return projectService.addProject(projectDTO);
     }

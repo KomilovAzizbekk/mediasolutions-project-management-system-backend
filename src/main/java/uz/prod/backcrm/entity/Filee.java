@@ -19,19 +19,22 @@ import javax.persistence.Entity;
 @DynamicInsert
 @DynamicUpdate
 @EqualsAndHashCode(callSuper = true)
-@Entity(name = "client")
+@Entity(name = "files")
 @Where(clause = "deleted=false")
-@SQLDelete(sql = "UPDATE client SET deleted=true WHERE id=?")
-public class Client extends AbsUUID {
+@SQLDelete(sql = "UPDATE files SET deleted=true WHERE id=?")
+public class Filee extends AbsUUID {
 
-    @Column(nullable = false, name = "full_name")
-    private String fullName;
+    @Column(nullable = false, name = "file_name")
+    private String fileName;
 
-    @Column(nullable = false, name = "phone_number")
-    private String phoneNumber1;
+    @Column(nullable = false, name = "size")
+    private Integer size;
 
-    @Column(name = "extra_phone_number")
-    private String phoneNumber2;
+    @Column(nullable = false, name = "original_name")
+    private String originalName;
 
+    //PAPKALAR ICHIDAN FILENI TOPISH UCHUN KERAK BOLADI
+    @Column(nullable = false)
+    private String path;
 
 }

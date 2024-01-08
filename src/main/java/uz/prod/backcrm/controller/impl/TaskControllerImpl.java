@@ -27,6 +27,11 @@ public class TaskControllerImpl implements TaskController {
     }
 
     @Override
+    public ApiResult<List<TaskDTO>> getAllMyTasks(int page, int size) {
+        return taskService.getAllMyTasks(page, size);
+    }
+
+    @Override
     public ApiResult<?> addTask(TaskDTO taskDTO) {
         return taskService.addTask(taskDTO);
     }

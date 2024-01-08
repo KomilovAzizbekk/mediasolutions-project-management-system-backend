@@ -14,10 +14,16 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.web.servlet.LocaleResolver;
+import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
+import org.springframework.web.servlet.i18n.LocaleChangeInterceptor;
+import org.springframework.web.servlet.i18n.SessionLocaleResolver;
 import uz.prod.backcrm.secret.JwtAuthFilter;
 import uz.prod.backcrm.secret.JwtAuthenticationEntryPoint;
 import uz.prod.backcrm.service.impl.AuthServiceImpl;
 import uz.prod.backcrm.utills.constants.Rest;
+
+import java.util.Locale;
 
 
 @Configuration
@@ -79,4 +85,5 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
+
 }

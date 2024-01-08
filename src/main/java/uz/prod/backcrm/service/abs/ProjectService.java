@@ -14,11 +14,11 @@ public interface ProjectService {
 
     ApiResult<List<ProjectDTO>> getAllProjects(int page, int size);
 
+    ApiResult<List<ProjectDTO>> getMyProjects(int page, int size);
 
     ApiResult<?> editProject(UUID id, ProjectDTO projectDTO);
 
 
     ApiResult<?> deleteProject(UUID id);
-
 
 }

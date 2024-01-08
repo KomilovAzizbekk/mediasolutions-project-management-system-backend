@@ -1,25 +1,26 @@
 package uz.prod.backcrm.payload;
 
-import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import uz.prod.backcrm.utills.constants.Message;
 
+import javax.validation.constraints.NotNull;
 import java.util.UUID;
 
-@Data
 @AllArgsConstructor
 @NoArgsConstructor
+@Data
 @Builder
-public class ClientDTO {
+public class FileDTO {
 
+    @NotNull(message = "Id not null")
     private UUID id;
 
-    private String fullName;
+    private String name;
 
-    private String phoneNumber1;
+    private String url;
 
-    private String phoneNumber2;
-
+    private Long size;
 }

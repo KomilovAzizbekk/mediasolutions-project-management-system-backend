@@ -3,6 +3,7 @@ package uz.prod.backcrm.component;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.CommandLineRunner;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 import uz.prod.backcrm.entity.*;
 import uz.prod.backcrm.enums.LanguageName;
@@ -21,7 +22,7 @@ public class DataLoader implements CommandLineRunner {
     private final LanguageRepository languageRepository;
     private final UserRepository userRepository;
     private final StatusRepository statusRepository;
-    private final PaymentTypeRepository paymentTypeRepository;
+    private final PasswordEncoder passwordEncoder;
 
     @Value("${spring.sql.init.mode}")
     private String mode;
@@ -33,15 +34,14 @@ public class DataLoader implements CommandLineRunner {
             addLanguages();
             addAdmin();
             addStatus();
-            addPaymentType();
         }
     }
 
     private void addRoles(){
-        Role admin = Role.builder().roleName(RoleName.ADMIN).build();
-        Role pm = Role.builder().roleName(RoleName.PM).build();
-        Role programmer = Role.builder().roleName(RoleName.PROGRAMMER).build();
-        Role user = Role.builder().roleName(RoleName.USER).build();
+        Role admin = Role.builder().roleName(RoleName.ROLE_ADMIN).build();
+        Role pm = Role.builder().roleName(RoleName.ROLE_PM).build();
+        Role programmer = Role.builder().roleName(RoleName.ROLE_PROGRAMMER).build();
+        Role user = Role.builder().roleName(RoleName.ROLE_USER).build();
         roleRepository.saveAll(new ArrayList<>(List.of(admin, programmer, pm, user)));
     }
 
@@ -58,8 +58,12 @@ public class DataLoader implements CommandLineRunner {
                 .phoneNumber("+998996280240")
                 .firstName("Azizbek")
                 .lastName("Komilov")
-                .password("Qwerty123@")
-                .role(roleRepository.findByRoleName(RoleName.ADMIN))
+                .password(passwordEncoder.encode("Qwerty123@"))
+                .role(roleRepository.findByRoleName(RoleName.ROLE_ADMIN))
+                .enabled(true)
+                .accountNonExpired(true)
+                .accountNonLocked(true)
+                .credentialsNonExpired(true)
                 .build();
         userRepository.save(admin);
     }
@@ -72,10 +76,4 @@ public class DataLoader implements CommandLineRunner {
         statusRepository.saveAll(new ArrayList<>(List.of(done, accepted, denied, inProgress)));
     }
 
-    private void addPaymentType(){
-        PaymentType payme = PaymentType.builder().name("PAYME").build();
-        PaymentType click = PaymentType.builder().name("CLICK").build();
-        PaymentType apelsin = PaymentType.builder().name("APELSIN").build();
-        paymentTypeRepository.saveAll(new ArrayList<>(List.of(click, payme, apelsin)));
-    }
 }

@@ -22,7 +22,11 @@ public class ProjectDTO {
 
     private StatusDTO statusDTO;
 
-    private ClientDTO clientDTO;
+    private String clientName;
+
+    private String clientPhone1;
+
+    private String clientPhone2;
 
     private String description;
 
@@ -30,14 +34,16 @@ public class ProjectDTO {
 
     private String dealNumber;
 
-    private List<UserDTO> userDTOList;
+    private List<UserDTO> userDTOS;
 
-    private List<TaskDTO> taskDTOList;
+    private List<TaskDTO> taskDTOS;
 
     private Timestamp deadline;
 
     private String type;
 
-    private List<PaymentDTO> paymentDTOList;
+    private List<PaymentDTO> paymentDTOS;
+
+    private Timestamp createdAt;
 
 }

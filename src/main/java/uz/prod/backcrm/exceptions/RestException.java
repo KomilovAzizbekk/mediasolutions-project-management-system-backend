@@ -41,7 +41,7 @@ public class RestException extends RuntimeException {
         this.status = status;
     }
 
-    public RestException(String userMsg, HttpStatus status) {
+    private RestException(String userMsg, HttpStatus status) {
         super(userMsg);
         this.userMsg = userMsg;
         this.status = status;

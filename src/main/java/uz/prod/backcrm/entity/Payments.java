@@ -8,6 +8,7 @@ import org.hibernate.annotations.Where;
 import uz.prod.backcrm.entity.template.AbsUUID;
 
 import javax.persistence.*;
+import java.sql.Timestamp;
 import java.util.List;
 
 @Getter
@@ -24,13 +25,16 @@ import java.util.List;
 @SQLDelete(sql = "UPDATE payments SET deleted=true WHERE id=?")
 public class Payments extends AbsUUID {
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    private PaymentType paymentType;
+    @Column(nullable = false, name = "type")
+    private String type;
 
     @Column(nullable = false, name = "sum")
     private Double sum;
 
+    @Column(nullable = false, name = "repetition_period")
+    private Timestamp repetitionPeriod;
+
     @OneToMany(fetch = FetchType.LAZY)
-    private List<PaymentHistory> paymentHistory;
+    private List<PaymentHistory> paymentHistories;
 
 }
