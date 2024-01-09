@@ -30,7 +30,7 @@ public interface UserController {
 
 
     @GetMapping(ME)
-    ApiResult<UserDTO> getMe(@CurrentUser User user);
+    ApiResult<UserDTO> getMe();
 
     @GetMapping(GET_ALL_USERS_OR_ADMINS)
     @PreAuthorize("hasRole('ROLE_ADMIN')")
@@ -52,7 +52,7 @@ public interface UserController {
 
     @PostMapping(BLOCK)
     @PreAuthorize("hasRole('ROLE_ADMIN')")
-    ApiResult<?> blockUser(@CurrentUser User me, @PathVariable UUID id);
+    ApiResult<?> blockUser(@PathVariable UUID id);
 
     @PostMapping(UNBLOCK)
     @PreAuthorize("hasRole('ROLE_ADMIN')")
@@ -60,16 +60,16 @@ public interface UserController {
 
     @PutMapping(EDIT_ME)
     @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_PM', 'ROLE_PROGRAMMER', 'ROLE_USER')")
-    ApiResult<?> editProfile(@CurrentUser User user, @Valid @RequestBody ProfileDTO profileDTO);
+    ApiResult<?> editProfile(@Valid @RequestBody ProfileDTO profileDTO);
 
     //FAQAT USERLARNI ROLINI ALMASHTIRA OLADI
     @PutMapping(EDIT_BY_ADMIN)
     @PreAuthorize("hasRole('ROLE_ADMIN')")
-    ApiResult<?> editByAdmin(@CurrentUser User me, @PathVariable UUID id, @PathVariable Long roleId);
+    ApiResult<?> editByAdmin(@PathVariable UUID id, @PathVariable Long roleId);
 
     @DeleteMapping(DELETE_ME)
     @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_PM', 'ROLE_PROGRAMMER', 'ROLE_USER')")
-    ApiResult<?> deleteProfile(@CurrentUser User user);
+    ApiResult<?> deleteProfile();
 
 
 }

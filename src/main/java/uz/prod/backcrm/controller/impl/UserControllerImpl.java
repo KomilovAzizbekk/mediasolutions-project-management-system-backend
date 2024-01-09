@@ -20,8 +20,8 @@ public class UserControllerImpl implements UserController {
     private final UserService userService;
 
     @Override
-    public ApiResult<UserDTO> getMe(User user) {
-        return userService.me(user);
+    public ApiResult<UserDTO> getMe() {
+        return userService.me();
     }
 
     @Override
@@ -40,8 +40,8 @@ public class UserControllerImpl implements UserController {
     }
 
     @Override
-    public ApiResult<?> blockUser(User me, UUID id) {
-        return userService.blockUser(me, id);
+    public ApiResult<?> blockUser(UUID id) {
+        return userService.blockUser(id);
     }
 
     @Override
@@ -50,17 +50,17 @@ public class UserControllerImpl implements UserController {
     }
 
     @Override
-    public ApiResult<?> editProfile(User user, ProfileDTO profileDTO) {
-        return userService.editProfile(user, profileDTO);
+    public ApiResult<?> editProfile(ProfileDTO profileDTO) {
+        return userService.editProfile(profileDTO);
     }
 
     @Override
-    public ApiResult<?> editByAdmin(User me, UUID id, Long roleId) {
-        return userService.editByAdmin(me, id, roleId);
+    public ApiResult<?> editByAdmin(UUID id, Long roleId) {
+        return userService.editByAdmin(id, roleId);
     }
 
     @Override
-    public ApiResult<?> deleteProfile(User user) {
-        return userService.deleteProfile(user);
+    public ApiResult<?> deleteProfile() {
+        return userService.deleteProfile();
     }
 }

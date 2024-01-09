@@ -12,7 +12,7 @@ import java.util.UUID;
 
 public interface UserService {
 
-    ApiResult<UserDTO> me(User user);
+    ApiResult<UserDTO> me();
 
     ApiResult<List<UserDTO>> getAllUsersOrAdmins(boolean areUsers, int page, int size);
 
@@ -20,14 +20,14 @@ public interface UserService {
 
     ApiResult<List<UserDTO>> getActiveUsersOrAdmins(boolean areUsers, int page, int size);
 
-    ApiResult<?> blockUser(User me, UUID id);
+    ApiResult<?> blockUser(UUID id);
 
     ApiResult<?> unblockUser(UUID id);
 
-    ApiResult<?> editProfile(User user, ProfileDTO dto);
+    ApiResult<?> editProfile(ProfileDTO dto);
 
-    ApiResult<?> editByAdmin(User me, UUID id, Long roleId);
+    ApiResult<?> editByAdmin(UUID id, Long roleId);
 
-    ApiResult<?> deleteProfile(User user);
+    ApiResult<?> deleteProfile();
 
 }

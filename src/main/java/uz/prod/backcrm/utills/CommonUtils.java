@@ -10,7 +10,9 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 import uz.prod.backcrm.entity.User;
+import uz.prod.backcrm.repository.UserRepository;
 import uz.prod.backcrm.secret.JwtAuthFilter;
+import uz.prod.backcrm.secret.JwtProvider;
 import uz.prod.backcrm.utills.constants.Rest;
 
 
@@ -18,11 +20,13 @@ import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
 import java.util.Locale;
 import java.util.Optional;
+import java.util.UUID;
 
 @Component
 public class CommonUtils {
 
     private static JwtAuthFilter jwtAuthFilter;
+    private static JwtProvider jwtProvider;
 
 
     //SECURITY DAN USERNI OLISH
@@ -59,6 +63,11 @@ public class CommonUtils {
             return user!=null?user:new User();
         }
         return new User();
+    }
+
+    public static UUID getUserIDFromToken(){
+        String token = currentRequest().getHeader(Rest.AUTHORIZATION_HEADER);
+        return jwtProvider.getUserIdFromToken(token);
     }
 
 

@@ -32,8 +32,8 @@ public class UserServiceImpl implements UserService {
     private final MessageSource messageSource;
 
     @Override
-    public ApiResult<UserDTO> me(User user){
-        return ApiResult.success(userMapper.toDTO(user));
+    public ApiResult<UserDTO> me(){
+        return ApiResult.success(userMapper.toDTO(CommonUtils.getUserFromSecurityContext()));
     }
 
     @Override
@@ -64,13 +64,17 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public ApiResult<?> blockUser(User me, UUID id) {
+    public ApiResult<?> blockUser(UUID id) {
         String message = CommonUtils.createMessage(Message.NOT_FOUND, messageSource, new Object[]{id});
+        User me = CommonUtils.getUserFromSecurityContext();
         User user = userRepository.findById(id).orElseThrow(
                 () -> RestException.restThrow(message, HttpStatus.BAD_REQUEST));
-        if (user.getRole().getId() == 1 && user.getCreatedAt().before(me.getCreatedAt())){
-            throw RestException.restThrow(CommonUtils.createMessage(Message.CANNOT_BLOCK,
-                    messageSource, null), HttpStatus.CONFLICT);
+        if (user.getRole().getId() == 1) {
+            assert me != null;
+            if (user.getCreatedAt().before(me.getCreatedAt())) {
+                throw RestException.restThrow(CommonUtils.createMessage(Message.CANNOT_BLOCK,
+                        messageSource, null), HttpStatus.CONFLICT);
+            }
         }
         user.setAccountNonLocked(false);
         userRepository.save(user);
@@ -88,7 +92,9 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public ApiResult<?> editProfile(User user, ProfileDTO dto) {
+    public ApiResult<?> editProfile(ProfileDTO dto) {
+        User user = CommonUtils.getUserFromSecurityContext();
+        assert user != null;
         user.setUsername(dto.getUsername());
         user.setFirstName(dto.getFirstName());
         user.setLastName(dto.getLastName());
@@ -98,13 +104,17 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public ApiResult<?> editByAdmin(User me, UUID id, Long roleId) {
+    public ApiResult<?> editByAdmin(UUID id, Long roleId) {
         String message = CommonUtils.createMessage(Message.NOT_FOUND, messageSource, new Object[]{id});
         User user = userRepository.findById(id).orElseThrow(
                 () -> RestException.restThrow(message, HttpStatus.BAD_REQUEST));
-        if (user.getRole().getId() == 1 && user.getCreatedAt().before(me.getCreatedAt())){
-            throw RestException.restThrow(CommonUtils.createMessage(Message.CANNOT_EDIT,
-                    messageSource, null), HttpStatus.CONFLICT);
+        User me = CommonUtils.getUserFromSecurityContext();
+        if (user.getRole().getId() == 1) {
+            assert me != null;
+            if (user.getCreatedAt().before(me.getCreatedAt())) {
+                throw RestException.restThrow(CommonUtils.createMessage(Message.CANNOT_EDIT,
+                        messageSource, null), HttpStatus.CONFLICT);
+            }
         }
         Role role = roleRepository.findById(roleId).orElseThrow(
                 () -> RestException.restThrow(message, HttpStatus.BAD_REQUEST));
@@ -114,8 +124,10 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public ApiResult<?> deleteProfile(User user) {
+    public ApiResult<?> deleteProfile() {
+        User user = CommonUtils.getUserFromSecurityContext();
         try {
+            assert user != null;
             userRepository.deleteById(user.getId());
             return ApiResult.success(CommonUtils.createMessage(Message.DELETED_SUCCESSFULLY,
                     messageSource, new Object[]{null}));

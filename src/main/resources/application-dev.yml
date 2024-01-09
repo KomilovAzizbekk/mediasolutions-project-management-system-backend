@@ -27,6 +27,7 @@ spring:
       mode: never
 
 
+
 #logging:
 #  pattern:
 #    file: "%d{yyyy-MM-dd HH:mm:ss} - %msg%n"
