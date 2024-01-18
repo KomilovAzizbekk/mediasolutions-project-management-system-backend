@@ -6,4 +6,7 @@ import uz.prod.backcrm.enums.StatusName;
 
 public interface StatusRepository extends JpaRepository<Status, Long> {
 
+    Status findByName(StatusName statusName);
+
+
 }

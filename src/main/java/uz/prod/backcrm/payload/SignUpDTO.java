@@ -30,6 +30,8 @@ public class SignUpDTO {
     @NotBlank(message = "{SHOULD_NOT_BE_EMPTY}")
     private String username;
 
+    private RoleDTO role;
+
     @NotBlank(message = "{SHOULD_NOT_BE_EMPTY}")
     @Pattern(regexp = Rest.PASSWORD_REGEX, message = "Incorrect password standard")
     private String password;

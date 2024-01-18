@@ -1,11 +1,10 @@
 package uz.prod.backcrm.controller.abs;
 
-import io.swagger.annotations.Api;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
-import uz.prod.backcrm.entity.Task;
 import uz.prod.backcrm.manual.ApiResult;
-import uz.prod.backcrm.payload.TaskDTO;
+import uz.prod.backcrm.payload.TaskResDTO;
+import uz.prod.backcrm.payload.TaskReqDTO;
 import uz.prod.backcrm.utills.constants.Rest;
 
 import javax.validation.Valid;
@@ -21,9 +20,13 @@ public interface TaskController {
 
     String GET_BY_PROJECT_ID = "by-project/{id}";
 
+    String GET_PENDING = "get-pending";
+
     String GET_MY_TASKS = "my-tasks";
 
-    String ADD = "add";
+    String ADD = "add/{pId}";
+    String ACCEPT_OR_DECLINE = "a-d/{id}";
+    String UPDATE_TASK_STATUS = "update-ts/{tId}";
 
     String EDIT = "edit/{id}";
 
@@ -31,26 +34,41 @@ public interface TaskController {
 
     @GetMapping(GET_BY_ID)
     @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_PM', 'ROLE_PROGRAMMER')")
-    ApiResult<TaskDTO> getTaskById(@PathVariable UUID id);
+    ApiResult<TaskResDTO> getTaskById(@PathVariable UUID id);
+
+    @GetMapping(GET_PENDING)
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_PM')")
+    ApiResult<List<TaskResDTO>> getPending(@RequestParam(defaultValue = Rest.DEFAULT_PAGE_NUMBER) int page,
+                                           @RequestParam(defaultValue = Rest.DEFAULT_PAGE_SIZE) int size);
 
     @GetMapping(GET_BY_PROJECT_ID)
     @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_PM')")
-    ApiResult<List<TaskDTO>> getAllTasksByProjectId(@PathVariable UUID id,
-                                                    @RequestParam(defaultValue = Rest.DEFAULT_PAGE_NUMBER) int page,
-                                                    @RequestParam(defaultValue = Rest.DEFAULT_PAGE_SIZE) int size);
+    ApiResult<List<TaskResDTO>> getAllTasksByProjectId(@PathVariable UUID id,
+                                                       @RequestParam(defaultValue = Rest.DEFAULT_PAGE_NUMBER) int page,
+                                                       @RequestParam(defaultValue = Rest.DEFAULT_PAGE_SIZE) int size);
 
     @GetMapping(GET_MY_TASKS)
     @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_PM', 'ROLE_PROGRAMMER')")
-    ApiResult<List<TaskDTO>> getAllMyTasks(@RequestParam(defaultValue = Rest.DEFAULT_PAGE_NUMBER) int page,
-                                           @RequestParam(defaultValue = Rest.DEFAULT_PAGE_SIZE) int size);
+    ApiResult<List<TaskResDTO>> getAllMyTasks(@RequestParam(defaultValue = Rest.DEFAULT_PAGE_NUMBER) int page,
+                                              @RequestParam(defaultValue = Rest.DEFAULT_PAGE_SIZE) int size);
 
     @PostMapping(ADD)
     @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_PM')")
-    ApiResult<?> addTask(@Valid @RequestBody TaskDTO taskDTO);
+    ApiResult<?> addTask(@PathVariable UUID pId, @Valid @RequestBody List<TaskReqDTO> taskReqDTOS);
+
+    @PostMapping(ACCEPT_OR_DECLINE)
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_PM')")
+    ApiResult<?> acceptOrDecline(@RequestParam(defaultValue = "false") boolean accept,
+                                 @PathVariable UUID id);
+
+    @PostMapping(UPDATE_TASK_STATUS)
+    @PreAuthorize("hasAnyRole('ROLE_PM', 'ROLE_PROGRAMMER', 'ROLE_ADMIN')")
+    ApiResult<?> updateTaskStatus(@PathVariable UUID tId);
+
 
     @PutMapping(EDIT)
     @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_PM')")
-    ApiResult<?> editTask(@PathVariable UUID id, @Valid @RequestBody TaskDTO taskDTO);
+    ApiResult<?> editTask(@PathVariable UUID id, @Valid @RequestBody TaskReqDTO reqDTO);
 
     @DeleteMapping(DELETE)
     @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_PM')")

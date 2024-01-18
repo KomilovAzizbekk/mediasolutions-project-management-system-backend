@@ -1,10 +1,7 @@
 package uz.prod.backcrm.service.abs;
 
-import io.swagger.annotations.Api;
-import uz.prod.backcrm.entity.User;
 import uz.prod.backcrm.manual.ApiResult;
 import uz.prod.backcrm.payload.ProfileDTO;
-import uz.prod.backcrm.payload.RoleDTO;
 import uz.prod.backcrm.payload.UserDTO;
 
 import java.util.List;
@@ -24,10 +21,9 @@ public interface UserService {
 
     ApiResult<?> unblockUser(UUID id);
 
-    ApiResult<?> editProfile(ProfileDTO dto);
+    ApiResult<?> editByAdmin(UUID id, ProfileDTO profileDTO);
 
-    ApiResult<?> editByAdmin(UUID id, Long roleId);
+    ApiResult<?> deleteByAdmin(UUID id);
 
-    ApiResult<?> deleteProfile();
-
+    ApiResult<List<UserDTO>> getUsersByProjectId(int page, int size, UUID id);
 }

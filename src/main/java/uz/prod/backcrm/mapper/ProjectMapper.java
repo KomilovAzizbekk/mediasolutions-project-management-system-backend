@@ -3,17 +3,22 @@ package uz.prod.backcrm.mapper;
 import org.mapstruct.Mapper;
 import org.springframework.data.domain.Page;
 import uz.prod.backcrm.entity.Project;
-import uz.prod.backcrm.payload.ProjectDTO;
+import uz.prod.backcrm.entity.ProjectType;
+import uz.prod.backcrm.payload.ProjectResDTO;
 
 import java.util.List;
 
 @Mapper(componentModel = "spring")
 public interface ProjectMapper {
 
-    Project toEntity(ProjectDTO projectDTO);
+    Project toEntity(ProjectResDTO projectDTO);
 
-    ProjectDTO toDTO(Project project);
+    ProjectResDTO toDTO(Project project);
 
-    List<ProjectDTO> toDTOList(Page<Project> projects);
+    List<ProjectResDTO> toDTOList(Page<Project> projects);
+
+    ProjectType map(String value);
+
+    String map(ProjectType value);
 
 }

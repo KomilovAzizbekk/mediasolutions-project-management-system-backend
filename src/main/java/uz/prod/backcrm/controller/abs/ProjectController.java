@@ -3,7 +3,7 @@ package uz.prod.backcrm.controller.abs;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import uz.prod.backcrm.manual.ApiResult;
-import uz.prod.backcrm.payload.ProjectDTO;
+import uz.prod.backcrm.payload.ProjectResDTO;
 import uz.prod.backcrm.utills.constants.Rest;
 
 import javax.validation.Valid;
@@ -22,32 +22,36 @@ public interface ProjectController {
     String GET_MY_PROJECTS = "my-projects";
 
     String ADD = "add";
-
+    String ADD_USER_TO_PROJECT = "add-user-to-project/{pId}";
     String EDIT = "edit/{id}";
 
     String DELETE = "delete/{id}";
 
     @GetMapping(GET_BY_ID)
     @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_PM', 'ROLE_PROGRAMMER')")
-    ApiResult<ProjectDTO> getProjectById(@PathVariable UUID id);
+    ApiResult<ProjectResDTO> getProjectById(@PathVariable UUID id);
 
     @GetMapping(GET_ALL)
     @PreAuthorize("hasRole('ROLE_ADMIN')")
-    ApiResult<List<ProjectDTO>> getAllProjects(@RequestParam(defaultValue = Rest.DEFAULT_PAGE_NUMBER) int page,
-                                               @RequestParam(defaultValue = Rest.DEFAULT_PAGE_SIZE) int size);
+    ApiResult<List<ProjectResDTO>> getAllProjects(@RequestParam(defaultValue = Rest.DEFAULT_PAGE_NUMBER) int page,
+                                                  @RequestParam(defaultValue = Rest.DEFAULT_PAGE_SIZE) int size);
 
     @GetMapping(GET_MY_PROJECTS)
     @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_PM', 'ROLE_PROGRAMMER')")
-    ApiResult<List<ProjectDTO>> getMyProjects(@RequestParam(defaultValue = Rest.DEFAULT_PAGE_NUMBER) int page,
-                                               @RequestParam(defaultValue = Rest.DEFAULT_PAGE_SIZE) int size);
+    ApiResult<List<ProjectResDTO>> getMyProjects(@RequestParam(defaultValue = Rest.DEFAULT_PAGE_NUMBER) int page,
+                                                 @RequestParam(defaultValue = Rest.DEFAULT_PAGE_SIZE) int size);
 
     @PostMapping(ADD)
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_PM')")
+    ApiResult<?> addProject(@Valid @RequestBody ProjectResDTO projectDTO);
+
+    @PostMapping(ADD_USER_TO_PROJECT)
     @PreAuthorize("hasRole('ROLE_ADMIN')")
-    ApiResult<?> addProject(@Valid @RequestBody ProjectDTO projectDTO);
+    ApiResult<?> addUserToProject(@RequestBody List<UUID> userIdList, @PathVariable UUID pId);
 
     @PutMapping(EDIT)
     @PreAuthorize("hasRole('ROLE_ADMIN')")
-    ApiResult<?> editProject(@PathVariable UUID id, @Valid @RequestBody ProjectDTO projectDTO);
+    ApiResult<?> editProject(@PathVariable UUID id, @Valid @RequestBody ProjectResDTO projectDTO);
 
     @DeleteMapping(DELETE)
     @PreAuthorize("hasRole('ROLE_ADMIN')")

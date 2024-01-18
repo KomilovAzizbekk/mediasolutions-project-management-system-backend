@@ -6,8 +6,10 @@ import org.hibernate.annotations.DynamicUpdate;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
 import uz.prod.backcrm.entity.template.AbsUUID;
+import uz.prod.backcrm.enums.PaymentTypeName;
 
 import javax.persistence.*;
+import java.math.BigDecimal;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -26,14 +28,14 @@ import java.util.List;
 @SQLDelete(sql = "UPDATE payments SET deleted=true WHERE id=?")
 public class Payments extends AbsUUID {
 
-    @Column(nullable = false, name = "type")
-    private String type;
+    @ManyToOne(fetch = FetchType.LAZY)
+    private PaymentType type;
 
-    @Column(nullable = false, name = "sum")
-    private Double sum;
+    @Column(nullable = false, name = "sum", precision = 20, scale = 2)
+    private BigDecimal sum;
 
     @Column(nullable = false, name = "repetition_period")
-    private LocalDateTime repetitionPeriod;
+    private String repetitionPeriod;
 
     @OneToMany(fetch = FetchType.LAZY)
     private List<PaymentHistory> paymentHistories;

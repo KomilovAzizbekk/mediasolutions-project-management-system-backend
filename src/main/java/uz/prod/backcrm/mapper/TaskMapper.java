@@ -3,19 +3,19 @@ package uz.prod.backcrm.mapper;
 import org.mapstruct.Mapper;
 import org.springframework.data.domain.Page;
 import uz.prod.backcrm.entity.Task;
-import uz.prod.backcrm.payload.TaskDTO;
+import uz.prod.backcrm.payload.TaskResDTO;
 
 import java.util.List;
 
 @Mapper(componentModel = "spring")
 public interface TaskMapper {
 
-    TaskDTO toDTO(Task task);
+    TaskResDTO toDTO(Task task);
 
-    Task toEntity(TaskDTO dto);
+    Task toEntity(TaskResDTO dto);
 
-    List<TaskDTO> toDTOList(Page<Task> tasks);
+    List<TaskResDTO> toDTOList(Page<Task> tasks);
 
-    List<Task> toEntityList(List<TaskDTO> taskDTOList);
+    List<Task> toEntityList(List<TaskResDTO> taskDTOList);
 
 }

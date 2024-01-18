@@ -4,8 +4,6 @@ import uz.prod.backcrm.entity.Role;
 
 public enum RoleName {
 
-    ROLE_USER,
-
     ROLE_ADMIN,
 
     ROLE_PM,

@@ -27,18 +27,6 @@ spring:
       mode: never
 
 
-
-#logging:
-#  pattern:
-#    file: "%d{yyyy-MM-dd HH:mm:ss} - %msg%n"
-#  file:
-#    name: logs/school-rank.log
-#  level:
-#    org.springframework.web: ERROR
-#    uz.schoolrank.schoolrank: ERROR
-#    org.hibernate: ERROR
-
-
 app:
   jwt:
     access:

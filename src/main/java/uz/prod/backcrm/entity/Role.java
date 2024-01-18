@@ -30,10 +30,10 @@ public class Role extends AbsLong implements GrantedAuthority {
 
     @Column(nullable = false, name = "name")
     @Enumerated(EnumType.STRING)
-    private RoleName roleName;
+    private RoleName name;
 
     @Override
     public String getAuthority() {
-        return roleName.name();
+        return name.name();
     }
 }

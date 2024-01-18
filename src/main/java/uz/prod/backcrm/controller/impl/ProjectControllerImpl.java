@@ -4,7 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.RestController;
 import uz.prod.backcrm.controller.abs.ProjectController;
 import uz.prod.backcrm.manual.ApiResult;
-import uz.prod.backcrm.payload.ProjectDTO;
+import uz.prod.backcrm.payload.ProjectResDTO;
 import uz.prod.backcrm.service.abs.ProjectService;
 
 import java.util.List;
@@ -17,27 +17,32 @@ public class ProjectControllerImpl implements ProjectController {
     private final ProjectService projectService;
 
     @Override
-    public ApiResult<ProjectDTO> getProjectById(UUID id) {
+    public ApiResult<ProjectResDTO> getProjectById(UUID id) {
         return projectService.getProjectById(id);
     }
 
     @Override
-    public ApiResult<List<ProjectDTO>> getAllProjects(int page, int size) {
+    public ApiResult<List<ProjectResDTO>> getAllProjects(int page, int size) {
         return projectService.getAllProjects(page, size);
     }
 
     @Override
-    public ApiResult<List<ProjectDTO>> getMyProjects(int page, int size) {
+    public ApiResult<List<ProjectResDTO>> getMyProjects(int page, int size) {
         return projectService.getMyProjects(page, size);
     }
 
     @Override
-    public ApiResult<?> addProject(ProjectDTO projectDTO) {
+    public ApiResult<?> addProject(ProjectResDTO projectDTO) {
         return projectService.addProject(projectDTO);
     }
 
     @Override
-    public ApiResult<?> editProject(UUID id, ProjectDTO projectDTO) {
+    public ApiResult<?> addUserToProject(List<UUID> userIdList, UUID pId) {
+        return projectService.addUserToProject(userIdList, pId);
+    }
+
+    @Override
+    public ApiResult<?> editProject(UUID id, ProjectResDTO projectDTO) {
         return projectService.editProject(id, projectDTO);
     }
 

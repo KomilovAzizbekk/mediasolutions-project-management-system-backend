@@ -19,6 +19,9 @@ public interface UserRepository extends JpaRepository<User, UUID> {
      @Query(nativeQuery = true, value = "select * from users u where u.role_id=1")
      Page<User> findAllAdmins(Pageable pageable);
 
+     @Query(nativeQuery = true, value = "select * from users u join project_users pu on u.id = pu.users_id where project_id=:id")
+     Page<User> findAllByProjectId(Pageable pageable, UUID id);
+
      Optional<User> findFirstByUsernameAndEnabledIsTrueAndAccountNonExpiredIsTrueAndAccountNonLockedIsTrueAndCredentialsNonExpiredIsTrue(String username);
 
      Optional<User> findByUsername(String username);

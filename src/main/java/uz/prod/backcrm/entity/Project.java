@@ -8,7 +8,7 @@ import org.hibernate.annotations.Where;
 import uz.prod.backcrm.entity.template.AbsUUID;
 
 import javax.persistence.*;
-import java.sql.Timestamp;
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -44,8 +44,8 @@ public class Project extends AbsUUID {
     @Column(name = "description")
     private String description;
 
-    @Column(nullable = false, name = "price")
-    private Double price;
+    @Column(nullable = false, name = "price", precision = 20, scale = 2)
+    private BigDecimal price;
 
     @Column(name = "deal_number")
     private String dealNumber;
@@ -60,8 +60,9 @@ public class Project extends AbsUUID {
     @Column(nullable = false, name = "deadline")
     private LocalDateTime deadline;
 
-    @Column(nullable = false, name = "project_type")
-    private String type;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @Enumerated(EnumType.STRING)
+    private ProjectType type;
 
     @OneToMany(fetch = FetchType.LAZY)
     private List<Payments> payments;

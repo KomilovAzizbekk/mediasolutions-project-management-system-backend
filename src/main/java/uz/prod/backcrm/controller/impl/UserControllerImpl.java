@@ -3,10 +3,8 @@ package uz.prod.backcrm.controller.impl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.RestController;
 import uz.prod.backcrm.controller.abs.UserController;
-import uz.prod.backcrm.entity.User;
 import uz.prod.backcrm.manual.ApiResult;
 import uz.prod.backcrm.payload.ProfileDTO;
-import uz.prod.backcrm.payload.RoleDTO;
 import uz.prod.backcrm.payload.UserDTO;
 import uz.prod.backcrm.service.abs.UserService;
 
@@ -40,6 +38,11 @@ public class UserControllerImpl implements UserController {
     }
 
     @Override
+    public ApiResult<List<UserDTO>> getUsersByProjectId(int page, int size, UUID id) {
+        return userService.getUsersByProjectId(page, size, id);
+    }
+
+    @Override
     public ApiResult<?> blockUser(UUID id) {
         return userService.blockUser(id);
     }
@@ -50,17 +53,13 @@ public class UserControllerImpl implements UserController {
     }
 
     @Override
-    public ApiResult<?> editProfile(ProfileDTO profileDTO) {
-        return userService.editProfile(profileDTO);
+    public ApiResult<?> editByAdmin(UUID id, ProfileDTO profileDTO) {
+        return userService.editByAdmin(id, profileDTO);
     }
 
     @Override
-    public ApiResult<?> editByAdmin(UUID id, Long roleId) {
-        return userService.editByAdmin(id, roleId);
+    public ApiResult<?> deleteByAdmin(UUID id) {
+        return userService.deleteByAdmin(id);
     }
 
-    @Override
-    public ApiResult<?> deleteProfile() {
-        return userService.deleteProfile();
-    }
 }

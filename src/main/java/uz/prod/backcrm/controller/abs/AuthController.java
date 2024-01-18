@@ -1,5 +1,6 @@
 package uz.prod.backcrm.controller.abs;
 
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -23,6 +24,7 @@ public interface AuthController {
     @PostMapping(SIGN_IN)
     ApiResult<TokenDTO> signIn(@Valid @RequestBody SignInDTO dto);
 
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @PostMapping(SIGN_UP)
     ApiResult<TokenDTO> signUp(@Valid @RequestBody SignUpDTO dto);
 

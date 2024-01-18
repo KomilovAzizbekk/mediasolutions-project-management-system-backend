@@ -24,6 +24,8 @@ public class ProfileDTO {
     @NotBlank(message = "{SHOULD_NOT_BE_EMPTY}")
     private String lastName;
 
+    private RoleDTO role;
+
     @NotBlank(message = "{SHOULD_NOT_BE_EMPTY}")
     @Pattern(regexp = Rest.PHONE_NUMBER_REGEX, message = "Incorrect phone number standard")
     private String phoneNumber;

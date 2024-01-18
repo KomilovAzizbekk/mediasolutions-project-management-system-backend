@@ -2,12 +2,13 @@ package uz.prod.backcrm.service.impl;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.MessageSource;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
-import uz.prod.backcrm.entity.Role;
 import uz.prod.backcrm.entity.User;
+import uz.prod.backcrm.enums.RoleName;
 import uz.prod.backcrm.exceptions.RestException;
 import uz.prod.backcrm.manual.ApiResult;
 import uz.prod.backcrm.mapper.UserMapper;
@@ -92,19 +93,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public ApiResult<?> editProfile(ProfileDTO dto) {
-        User user = CommonUtils.getUserFromSecurityContext();
-        assert user != null;
-        user.setUsername(dto.getUsername());
-        user.setFirstName(dto.getFirstName());
-        user.setLastName(dto.getLastName());
-        user.setPhoneNumber(dto.getPhoneNumber());
-        userRepository.save(user);
-        return ApiResult.success(CommonUtils.createMessage(Message.UPDATED_SUCCESSFULLY, messageSource, new Object[]{dto}));
-    }
-
-    @Override
-    public ApiResult<?> editByAdmin(UUID id, Long roleId) {
+    public ApiResult<?> editByAdmin(UUID id, ProfileDTO profileDTO) {
         String message = CommonUtils.createMessage(Message.NOT_FOUND, messageSource, new Object[]{id});
         User user = userRepository.findById(id).orElseThrow(
                 () -> RestException.restThrow(message, HttpStatus.BAD_REQUEST));
@@ -116,19 +105,30 @@ public class UserServiceImpl implements UserService {
                         messageSource, null), HttpStatus.CONFLICT);
             }
         }
-        Role role = roleRepository.findById(roleId).orElseThrow(
-                () -> RestException.restThrow(message, HttpStatus.BAD_REQUEST));
-        user.setRole(role);
+        user.setUsername(profileDTO.getUsername());
+        user.setFirstName(profileDTO.getFirstName());
+        user.setLastName(profileDTO.getLastName());
+        user.setPhoneNumber(profileDTO.getPhoneNumber());
+        user.setRole(roleRepository.findByName(RoleName.valueOf(profileDTO.getRole().getName())));
         userRepository.save(user);
         return ApiResult.success(CommonUtils.createMessage(Message.UPDATED_SUCCESSFULLY, messageSource, new Object[]{id}));
     }
 
     @Override
-    public ApiResult<?> deleteProfile() {
-        User user = CommonUtils.getUserFromSecurityContext();
+    public ApiResult<?> deleteByAdmin(UUID id) {
+        User me = CommonUtils.getUserFromSecurityContext();
+        User user = userRepository.findById(id).orElseThrow(
+                () -> RestException.restThrow(CommonUtils.createMessage(Message.NOT_FOUND,
+                        messageSource, null), HttpStatus.BAD_REQUEST));
+        if (user.getRole().getId() == 1) {
+            assert me != null;
+            if (user.getCreatedAt().before(me.getCreatedAt())) {
+                throw RestException.restThrow(CommonUtils.createMessage(Message.DELETE_FAILED,
+                        messageSource, null), HttpStatus.CONFLICT);
+            }
+        }
         try {
-            assert user != null;
-            userRepository.deleteById(user.getId());
+            userRepository.deleteById(id);
             return ApiResult.success(CommonUtils.createMessage(Message.DELETED_SUCCESSFULLY,
                     messageSource, new Object[]{null}));
         } catch (Exception e) {
@@ -137,5 +137,11 @@ public class UserServiceImpl implements UserService {
         }
     }
 
+    @Override
+    public ApiResult<List<UserDTO>> getUsersByProjectId(int page, int size, UUID id) {
+        Pageable pageable = PageRequest.of(page, size);
+        Page<User> users = userRepository.findAllByProjectId(pageable, id);
+        return ApiResult.success(userMapper.toDTOList(users));
+    }
 
 }

@@ -2,12 +2,11 @@ package uz.prod.backcrm.enums;
 
 public enum StatusName {
 
-    ACCEPTED,
+    CREATED,
+    IN_PROGRESS,
+    DEADLINE_HAS_PASSED,
+    COMPLETED,
+    PENDING;
 
-    DENIED,
 
-    DONE,
-
-    IN_PROGRESS
-
-}
+  }

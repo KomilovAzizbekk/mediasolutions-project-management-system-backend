@@ -16,6 +16,7 @@ import uz.prod.backcrm.entity.User;
 import uz.prod.backcrm.enums.RoleName;
 import uz.prod.backcrm.exceptions.RestException;
 import uz.prod.backcrm.manual.ApiResult;
+import uz.prod.backcrm.mapper.RoleMapper;
 import uz.prod.backcrm.payload.SignInDTO;
 import uz.prod.backcrm.payload.SignUpDTO;
 import uz.prod.backcrm.payload.TokenDTO;
@@ -42,6 +43,7 @@ public class AuthServiceImpl implements AuthService, UserDetailsService {
     private final PasswordEncoder passwordEncoder;
     private final RoleRepository roleRepository;
     private final MessageSource messageSource;
+    private final RoleMapper roleMapper;
 
 
     @Override
@@ -134,7 +136,7 @@ public class AuthServiceImpl implements AuthService, UserDetailsService {
                 .firstName(signUpDTO.getFirstName())
                 .lastName(signUpDTO.getLastName())
                 .phoneNumber(signUpDTO.getPhoneNumber())
-                .role(roleRepository.findByRoleName(RoleName.ROLE_USER))
+                .role(roleRepository.findByName(RoleName.valueOf(signUpDTO.getRole().getName())))
                 .accountNonExpired(true).accountNonLocked(true).credentialsNonExpired(true).enabled(true)
                 .build()));
     }

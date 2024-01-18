@@ -8,12 +8,18 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import uz.prod.backcrm.entity.Project;
+import uz.prod.backcrm.entity.ProjectType;
 import uz.prod.backcrm.entity.User;
+import uz.prod.backcrm.enums.ProjectTypeName;
+import uz.prod.backcrm.enums.StatusName;
 import uz.prod.backcrm.exceptions.RestException;
 import uz.prod.backcrm.manual.ApiResult;
 import uz.prod.backcrm.mapper.*;
-import uz.prod.backcrm.payload.ProjectDTO;
+import uz.prod.backcrm.payload.ProjectResDTO;
 import uz.prod.backcrm.repository.ProjectRepository;
+import uz.prod.backcrm.repository.ProjectTypeRepository;
+import uz.prod.backcrm.repository.StatusRepository;
+import uz.prod.backcrm.repository.UserRepository;
 import uz.prod.backcrm.service.abs.ProjectService;
 import uz.prod.backcrm.utills.CommonUtils;
 import uz.prod.backcrm.utills.constants.Message;
@@ -27,21 +33,24 @@ public class ProjectServiceImpl implements ProjectService {
 
     private final ProjectRepository projectRepository;
     private final ProjectMapper projectMapper;
-    private final PaymentMapper paymentMapper;
-    private final StatusMapper statusMapper;
-    private final TaskMapper taskMapper;
-    private final UserMapper userMapper;
     private final MessageSource messageSource;
+    private final UserRepository userRepository;
+    private final StatusRepository statusRepository;
+    private final ProjectTypeMapper projectTypeMapper;
+    private final ProjectTypeRepository projectTypeRepository;
 
     @Override
-    public ApiResult<?> addProject(ProjectDTO projectDTO) {
+    public ApiResult<?> addProject(ProjectResDTO projectDTO) {
         Project project = projectMapper.toEntity(projectDTO);
+        project.setStatus(statusRepository.findByName(StatusName.CREATED));
+        ProjectType projectType = projectTypeRepository.findByName(ProjectTypeName.valueOf(projectDTO.getType().getName()));
+        project.setType(projectType);
         projectRepository.save(project);
         return ApiResult.success(CommonUtils.createMessage(Message.ADDED_SUCCESSFULLY, messageSource, new Object[]{projectDTO}));
     }
 
     @Override
-    public ApiResult<ProjectDTO> getProjectById(UUID id) {
+    public ApiResult<ProjectResDTO> getProjectById(UUID id) {
         String message = CommonUtils.createMessage(Message.NOT_FOUND, messageSource, new Object[]{id});
         Project project = projectRepository.findById(id).orElseThrow(
                 () -> RestException.restThrow(message, HttpStatus.BAD_REQUEST));
@@ -49,21 +58,21 @@ public class ProjectServiceImpl implements ProjectService {
     }
 
     @Override
-    public ApiResult<List<ProjectDTO>> getAllProjects(int page, int size) {
+    public ApiResult<List<ProjectResDTO>> getAllProjects(int page, int size) {
         Pageable pageable = PageRequest.of(page, size);
         Page<Project> projects = projectRepository.findAll(pageable);
         return ApiResult.success(projectMapper.toDTOList(projects));
     }
 
     @Override
-    public ApiResult<List<ProjectDTO>> getMyProjects(int page, int size) {
+    public ApiResult<List<ProjectResDTO>> getMyProjects(int page, int size) {
         Pageable pageable = PageRequest.of(page, size);
-        User user = CommonUtils.getUserFromRequest();
+        User user = CommonUtils.getUserFromSecurityContext();
         return ApiResult.success(projectMapper.toDTOList(projectRepository.findAllByUsers(user, pageable)));
     }
 
     @Override
-    public ApiResult<?> editProject(UUID id, ProjectDTO dto) {
+    public ApiResult<?> editProject(UUID id, ProjectResDTO dto) {
         String message = CommonUtils.createMessage(Message.NOT_FOUND, messageSource, new Object[]{id});
         Project project = projectRepository.findById(id).orElseThrow(
                 () -> RestException.restThrow(message, HttpStatus.BAD_REQUEST));
@@ -72,14 +81,11 @@ public class ProjectServiceImpl implements ProjectService {
         project.setDealNumber(dto.getDealNumber());
         project.setDescription(dto.getDescription());
         project.setPrice(dto.getPrice());
-        project.setType(dto.getType());
+        ProjectType projectType = projectTypeRepository.findByName(ProjectTypeName.valueOf(dto.getType().getName()));
+        project.setType(projectType);
         project.setClientName(dto.getClientName());
         project.setClientPhone1(dto.getClientPhone1());
         project.setClientPhone2(dto.getClientPhone2());
-        project.setPayments(paymentMapper.toEntityList(dto.getPaymentDTOS()));
-        project.setStatus(statusMapper.toEntity(dto.getStatusDTO()));
-        project.setTasks(taskMapper.toEntityList(dto.getTaskDTOS()));
-        project.setUsers(userMapper.toEntityList(dto.getUserDTOS()));
         projectRepository.save(project);
         return ApiResult.success(CommonUtils.createMessage(Message.UPDATED_SUCCESSFULLY, messageSource, new Object[]{id}));
     }
@@ -94,5 +100,15 @@ public class ProjectServiceImpl implements ProjectService {
             throw RestException.restThrow(CommonUtils.createMessage(Message.DELETE_FAILED,
                     messageSource, new Object[]{id}), HttpStatus.CONFLICT);
         }
+    }
+
+    @Override
+    public ApiResult<?> addUserToProject(List<UUID> userIdList, UUID pId) {
+        String message = CommonUtils.createMessage(Message.NOT_FOUND, messageSource, new Object[]{pId});
+        Project project = projectRepository.findById(pId).orElseThrow(
+                () -> RestException.restThrow(message, HttpStatus.BAD_REQUEST));
+        project.setUsers(userRepository.findAllById(userIdList));
+        projectRepository.save(project);
+        return ApiResult.success(CommonUtils.createMessage(Message.ADDED_SUCCESSFULLY, messageSource, null));
     }
 }

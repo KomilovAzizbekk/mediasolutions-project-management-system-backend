@@ -5,7 +5,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.sql.Timestamp;
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
@@ -17,7 +17,7 @@ public class PaymentHistoryDTO {
 
     private UUID id;
 
-    private Double sum;
+    private BigDecimal sum;
 
     private LocalDateTime dateTime;
 

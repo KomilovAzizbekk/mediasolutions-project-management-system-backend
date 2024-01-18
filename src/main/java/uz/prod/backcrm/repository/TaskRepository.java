@@ -6,6 +6,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import uz.prod.backcrm.entity.Task;
 import uz.prod.backcrm.entity.User;
+import uz.prod.backcrm.enums.StatusName;
 
 import java.util.List;
 import java.util.UUID;
@@ -16,5 +17,7 @@ public interface TaskRepository extends JpaRepository<Task, UUID> {
     Page<Task> getAllByProjectId(UUID id, Pageable pageable);
 
     Page<Task> findAllByUsers(User user, Pageable pageable);
+
+    Page<Task> findAllByStatus(Pageable pageable, StatusName satatus);
 
 }

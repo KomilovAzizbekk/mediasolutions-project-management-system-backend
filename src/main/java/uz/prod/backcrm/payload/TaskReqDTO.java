@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import uz.prod.backcrm.payload.AttachmentDTO;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -13,18 +14,18 @@ import java.util.UUID;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class TaskDTO {
+public class TaskReqDTO {
 
     private UUID id;
 
     private String name;
 
-    private StatusDTO statusDTO;
+    private List<UUID> userIds;
 
-    private List<UserDTO> userDTOS;
+    private StatusDTO status;
 
     private LocalDateTime deadline;
 
-    private List<FileDTO> fileDTOS;
+    private List<AttachmentDTO> attachments;
 
 }

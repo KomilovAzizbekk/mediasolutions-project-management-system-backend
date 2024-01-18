@@ -20,6 +20,8 @@ public interface Message {
     String FORBIDDEN_EXCEPTION = "forbidden.exception";
     String PATH_NOT_FOUND_EXCEPTION = "path.not.found";
     String SERVER_ERROR = "server.error";
+    String ACCEPTED = "accepted";
+    String REJECTED = "rejected";
 }
 
 

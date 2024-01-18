@@ -4,23 +4,22 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import uz.prod.backcrm.payload.ProjectTypeDTO;
+import uz.prod.backcrm.payload.StatusDTO;
 
-import java.sql.Timestamp;
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
-import java.util.List;
 import java.util.UUID;
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class ProjectDTO {
+public class ProjectResDTO {
 
     private UUID id;
 
     private String name;
-
-    private StatusDTO statusDTO;
 
     private String clientName;
 
@@ -30,18 +29,14 @@ public class ProjectDTO {
 
     private String description;
 
-    private Double price;
+    private BigDecimal price;
+
+    private StatusDTO status;
 
     private String dealNumber;
 
-    private List<UserDTO> userDTOS;
-
-    private List<TaskDTO> taskDTOS;
-
     private LocalDateTime deadline;
 
-    private String type;
-
-    private List<PaymentDTO> paymentDTOS;
+    private ProjectTypeDTO type;
 
 }

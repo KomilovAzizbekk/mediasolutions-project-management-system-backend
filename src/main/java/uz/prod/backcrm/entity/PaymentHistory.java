@@ -9,6 +9,7 @@ import uz.prod.backcrm.entity.template.AbsUUID;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import java.math.BigDecimal;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
 
@@ -26,8 +27,8 @@ import java.time.LocalDateTime;
 @SQLDelete(sql = "UPDATE payment_history SET deleted=true WHERE id=?")
 public class PaymentHistory extends AbsUUID {
 
-    @Column(nullable = false, name = "sum")
-    private Double sum;
+    @Column(nullable = false, name = "sum", precision = 20, scale = 2)
+    private BigDecimal sum;
 
     @Column(nullable = false, name = "date_time")
     private LocalDateTime dateTime;

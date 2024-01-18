@@ -26,15 +26,11 @@ public interface Rest {
     String PHONE_NUMBER_REGEX = "^[+][0-9]{9,15}$";
     String EMAIL_REGEX = "^[a-zA-Z0-9_+&*-]+(?:\\.[a-zA-Z0-9_+&*-]+)*@(?:[a-zA-Z0-9-]+\\.)+[a-zA-Z]{2,7}$";
     String PASSWORD_REGEX = "^(?=\\S+$)+.{6,}$";
-
-    String COMPANY = "School Rank";
     String DEFAULT_PAGE_NUMBER = "0";
     String DEFAULT_PAGE_SIZE = "10";
 
     String FILE_PATH = "files";
     String COOKIE_KEY = "FESSONLITEOPARES";
-
-    int CODE_COUNT = 6;
 
     // Rest Error codes
     int INCORRECT_USERNAME_OR_PASSWORD = 3001;

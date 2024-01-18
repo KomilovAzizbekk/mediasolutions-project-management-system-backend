@@ -4,7 +4,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.RestController;
 import uz.prod.backcrm.controller.abs.TaskController;
 import uz.prod.backcrm.manual.ApiResult;
-import uz.prod.backcrm.payload.TaskDTO;
+import uz.prod.backcrm.payload.TaskResDTO;
+import uz.prod.backcrm.payload.TaskReqDTO;
 import uz.prod.backcrm.service.abs.TaskService;
 
 import java.util.List;
@@ -17,28 +18,43 @@ public class TaskControllerImpl implements TaskController {
     private final TaskService taskService;
 
     @Override
-    public ApiResult<TaskDTO> getTaskById(UUID id) {
+    public ApiResult<TaskResDTO> getTaskById(UUID id) {
         return taskService.getTaskById(id);
     }
 
     @Override
-    public ApiResult<List<TaskDTO>> getAllTasksByProjectId(UUID id, int page, int size) {
+    public ApiResult<List<TaskResDTO>> getPending(int page, int size) {
+        return taskService.getPending(page, size);
+    }
+
+    @Override
+    public ApiResult<List<TaskResDTO>> getAllTasksByProjectId(UUID id, int page, int size) {
         return taskService.getAllTasksByProjectId(id, page, size);
     }
 
     @Override
-    public ApiResult<List<TaskDTO>> getAllMyTasks(int page, int size) {
+    public ApiResult<List<TaskResDTO>> getAllMyTasks(int page, int size) {
         return taskService.getAllMyTasks(page, size);
     }
 
     @Override
-    public ApiResult<?> addTask(TaskDTO taskDTO) {
-        return taskService.addTask(taskDTO);
+    public ApiResult<?> addTask(UUID pId, List<TaskReqDTO> taskReqDTOS) {
+        return taskService.addTaskToProject(pId, taskReqDTOS);
     }
 
     @Override
-    public ApiResult<?> editTask(UUID id, TaskDTO taskDTO) {
-        return taskService.editTask(id, taskDTO);
+    public ApiResult<?> acceptOrDecline(boolean accept, UUID id) {
+        return taskService.acceptOrDecline(accept,id);
+    }
+
+    @Override
+    public ApiResult<?> updateTaskStatus(UUID tId) {
+        return taskService.updateTaskStatus(tId);
+    }
+
+    @Override
+    public ApiResult<?> editTask(UUID id, TaskReqDTO reqDTO) {
+        return taskService.editTask(id, reqDTO);
     }
 
     @Override

@@ -40,6 +40,6 @@ public class Task extends AbsUUID {
     private LocalDateTime deadline;
 
     @ManyToMany(fetch = FetchType.LAZY)
-    private List<Filee> files;
+    private List<Attachment> attachments;
 
 }

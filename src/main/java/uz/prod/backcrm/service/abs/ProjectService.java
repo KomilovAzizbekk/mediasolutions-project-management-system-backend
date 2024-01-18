@@ -1,24 +1,25 @@
 package uz.prod.backcrm.service.abs;
 
 import uz.prod.backcrm.manual.ApiResult;
-import uz.prod.backcrm.payload.ProjectDTO;
+import uz.prod.backcrm.payload.ProjectResDTO;
 
 import java.util.List;
 import java.util.UUID;
 
 public interface ProjectService {
 
-    ApiResult<?> addProject(ProjectDTO projectDTO);
+    ApiResult<?> addProject(ProjectResDTO projectDTO);
 
-    ApiResult<ProjectDTO> getProjectById(UUID id);
+    ApiResult<ProjectResDTO> getProjectById(UUID id);
 
-    ApiResult<List<ProjectDTO>> getAllProjects(int page, int size);
+    ApiResult<List<ProjectResDTO>> getAllProjects(int page, int size);
 
-    ApiResult<List<ProjectDTO>> getMyProjects(int page, int size);
+    ApiResult<List<ProjectResDTO>> getMyProjects(int page, int size);
 
-    ApiResult<?> editProject(UUID id, ProjectDTO projectDTO);
+    ApiResult<?> editProject(UUID id, ProjectResDTO projectDTO);
 
 
     ApiResult<?> deleteProject(UUID id);
 
+    ApiResult<?> addUserToProject(List<UUID> userIdList, UUID pId);
 }

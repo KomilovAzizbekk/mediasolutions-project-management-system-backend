@@ -29,6 +29,6 @@ public class Status extends AbsLong {
 
     @Column(nullable = false, name = "name")
     @Enumerated(EnumType.STRING)
-    private StatusName statusName;
+    private StatusName name;
 
 }
