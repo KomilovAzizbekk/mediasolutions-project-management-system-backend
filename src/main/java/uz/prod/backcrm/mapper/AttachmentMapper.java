@@ -11,4 +11,6 @@ public interface AttachmentMapper {
 
     List<Attachment> toEntityList(List<AttachmentDTO> attachmentDTOS);
 
+    Attachment map(String value);
+
 }

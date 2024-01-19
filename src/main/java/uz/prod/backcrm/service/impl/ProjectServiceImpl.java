@@ -43,7 +43,7 @@ public class ProjectServiceImpl implements ProjectService {
     public ApiResult<?> addProject(ProjectResDTO projectDTO) {
         Project project = projectMapper.toEntity(projectDTO);
         project.setStatus(statusRepository.findByName(StatusName.CREATED));
-        ProjectType projectType = projectTypeRepository.findByName(ProjectTypeName.valueOf(projectDTO.getType().getName()));
+        ProjectType projectType = projectTypeRepository.findByName(ProjectTypeName.valueOf(projectDTO.getType()));
         project.setType(projectType);
         projectRepository.save(project);
         return ApiResult.success(CommonUtils.createMessage(Message.ADDED_SUCCESSFULLY, messageSource, new Object[]{projectDTO}));
@@ -81,7 +81,7 @@ public class ProjectServiceImpl implements ProjectService {
         project.setDealNumber(dto.getDealNumber());
         project.setDescription(dto.getDescription());
         project.setPrice(dto.getPrice());
-        ProjectType projectType = projectTypeRepository.findByName(ProjectTypeName.valueOf(dto.getType().getName()));
+        ProjectType projectType = projectTypeRepository.findByName(ProjectTypeName.valueOf(dto.getType()));
         project.setType(projectType);
         project.setClientName(dto.getClientName());
         project.setClientPhone1(dto.getClientPhone1());

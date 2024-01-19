@@ -75,7 +75,8 @@ public class DataLoader implements CommandLineRunner {
         Status created = Status.builder().name(StatusName.CREATED).build();
         Status deadlineHasPassed = Status.builder().name(StatusName.DEADLINE_HAS_PASSED).build();
         Status inProgress = Status.builder().name(StatusName.IN_PROGRESS).build();
-        statusRepository.saveAll(new ArrayList<>(List.of(completed, created, deadlineHasPassed, inProgress)));
+        Status pending = Status.builder().name(StatusName.PENDING).build();
+        statusRepository.saveAll(new ArrayList<>(List.of(completed, created, deadlineHasPassed, inProgress, pending)));
     }
 
     private void addProjectType(){

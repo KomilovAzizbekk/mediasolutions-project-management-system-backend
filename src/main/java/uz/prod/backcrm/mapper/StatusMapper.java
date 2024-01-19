@@ -12,7 +12,7 @@ import java.util.List;
 @Mapper(componentModel = "spring")
 public interface StatusMapper {
 
-    Status toEntity(StatusDTO statusDTO);
+    Status toEntity(String statusDTO);
 
     StatusDTO toDTO(Status status);
 
@@ -21,5 +21,7 @@ public interface StatusMapper {
     StatusName map(String value);
 
     String map(StatusName value);
+
+
 
 }

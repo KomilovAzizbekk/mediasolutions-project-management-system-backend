@@ -17,7 +17,7 @@ public class PaymentDTO {
 
     private UUID id;
 
-    private PaymentTypeDTO type;
+    private String type;
 
     private BigDecimal sum;
 

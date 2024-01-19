@@ -22,7 +22,7 @@ public class TaskReqDTO {
 
     private List<UUID> userIds;
 
-    private StatusDTO status;
+    private String status;
 
     private LocalDateTime deadline;
 

@@ -31,12 +31,12 @@ public class ProjectResDTO {
 
     private BigDecimal price;
 
-    private StatusDTO status;
+    private String status;
 
     private String dealNumber;
 
     private LocalDateTime deadline;
 
-    private ProjectTypeDTO type;
+    private String type;
 
 }

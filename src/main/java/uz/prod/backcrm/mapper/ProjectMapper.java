@@ -4,6 +4,7 @@ import org.mapstruct.Mapper;
 import org.springframework.data.domain.Page;
 import uz.prod.backcrm.entity.Project;
 import uz.prod.backcrm.entity.ProjectType;
+import uz.prod.backcrm.entity.Status;
 import uz.prod.backcrm.payload.ProjectResDTO;
 
 import java.util.List;
@@ -20,5 +21,9 @@ public interface ProjectMapper {
     ProjectType map(String value);
 
     String map(ProjectType value);
+
+    Status map1(String value);
+
+    String map(Status value);
 
 }

@@ -18,10 +18,7 @@ import uz.prod.backcrm.mapper.StatusMapper;
 import uz.prod.backcrm.mapper.TaskMapper;
 import uz.prod.backcrm.payload.TaskResDTO;
 import uz.prod.backcrm.payload.TaskReqDTO;
-import uz.prod.backcrm.repository.ProjectRepository;
-import uz.prod.backcrm.repository.StatusRepository;
-import uz.prod.backcrm.repository.TaskRepository;
-import uz.prod.backcrm.repository.UserRepository;
+import uz.prod.backcrm.repository.*;
 import uz.prod.backcrm.service.abs.TaskService;
 import uz.prod.backcrm.utills.CommonUtils;
 import uz.prod.backcrm.utills.constants.Message;
@@ -45,6 +42,7 @@ public class TaskServiceImpl implements TaskService {
     private final ProjectRepository projectRepository;
 
     private final AttachmentMapper attachmentMapper;
+    private final AttachmentRepository attachmentRepository;
 
     private final StatusRepository statusRepository;
 
@@ -81,7 +79,12 @@ public class TaskServiceImpl implements TaskService {
         for (Task task : tasks) {
             task.setStatus(statusRepository.findByName(StatusName.CREATED));
         }
+        for (TaskReqDTO taskReqDTO : taskReqDTOS) {
+            if (taskReqDTO.getAttachments() != null)
+                attachmentRepository.saveAll(attachmentMapper.toEntityList(taskReqDTO.getAttachments()));
+        }
         List<Task> taskList = taskRepository.saveAll(tasks);
+
         project.setTasks(taskList);
         projectRepository.save(project);
         return ApiResult.success(CommonUtils.createMessage(Message.ADDED_SUCCESSFULLY, messageSource, null));
@@ -125,7 +128,7 @@ public class TaskServiceImpl implements TaskService {
     @Override
     public ApiResult<List<TaskResDTO>> getPending(int page, int size) {
         Pageable pageable = PageRequest.of(page, size);
-        Page<Task> status = taskRepository.findAllByStatus(pageable, StatusName.PENDING);
+        Page<Task> status = taskRepository.findAllByStatusId(pageable, 5L);
         return ApiResult.success(taskMapper.toDTOList(status));
     }
 

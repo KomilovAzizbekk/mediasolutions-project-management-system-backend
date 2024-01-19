@@ -18,6 +18,7 @@ public interface TaskRepository extends JpaRepository<Task, UUID> {
 
     Page<Task> findAllByUsers(User user, Pageable pageable);
 
-    Page<Task> findAllByStatus(Pageable pageable, StatusName satatus);
+    @Query(nativeQuery = true, value = "select * from tasks t join status s on s.id = t.status_id where s.id=:id")
+    Page<Task> findAllByStatusId(Pageable pageable, Long id);
 
 }
