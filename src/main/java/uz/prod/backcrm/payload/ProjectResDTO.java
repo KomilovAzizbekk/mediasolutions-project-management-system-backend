@@ -4,11 +4,9 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import uz.prod.backcrm.payload.ProjectTypeDTO;
-import uz.prod.backcrm.payload.StatusDTO;
 
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 import java.util.UUID;
 
 @Data
@@ -35,7 +33,7 @@ public class ProjectResDTO {
 
     private String dealNumber;
 
-    private LocalDateTime deadline;
+    private LocalDate deadline;
 
     private String type;
 

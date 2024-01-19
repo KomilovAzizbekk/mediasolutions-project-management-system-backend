@@ -9,7 +9,7 @@ import uz.prod.backcrm.entity.template.AbsUUID;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 import java.util.List;
 
 @Getter
@@ -58,7 +58,7 @@ public class Project extends AbsUUID {
     private List<Task> tasks;
 
     @Column(nullable = false, name = "deadline")
-    private LocalDateTime deadline;
+    private LocalDate deadline;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @Enumerated(EnumType.STRING)
