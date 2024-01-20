@@ -43,7 +43,6 @@ public class AuthServiceImpl implements AuthService, UserDetailsService {
     private final PasswordEncoder passwordEncoder;
     private final RoleRepository roleRepository;
     private final MessageSource messageSource;
-    private final RoleMapper roleMapper;
 
 
     @Override
@@ -103,14 +102,14 @@ public class AuthServiceImpl implements AuthService, UserDetailsService {
             return (User) authentication.getPrincipal();
         } catch (DisabledException | LockedException | CredentialsExpiredException | BadCredentialsException |
                  UsernameNotFoundException disabledException) {
-            throw RestException.restThrow(message, HttpStatus.FORBIDDEN);
+            throw RestException.restThrow(message, HttpStatus.UNAUTHORIZED);
         }
     }
 
     private void usernameNotFoundThrow(String username){
         String message = CommonUtils.createMessage(Message.USERNAME_NOT_FOUND, messageSource, new Object[]{username});
         if (!userRepository.existsByUsername(username)) {
-            throw RestException.restThrow(message, HttpStatus.FORBIDDEN);
+            throw RestException.restThrow(message, HttpStatus.UNAUTHORIZED);
         }
     }
 

@@ -9,6 +9,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import uz.prod.backcrm.entity.Project;
 import uz.prod.backcrm.entity.ProjectType;
+import uz.prod.backcrm.entity.Status;
 import uz.prod.backcrm.entity.User;
 import uz.prod.backcrm.enums.ProjectTypeName;
 import uz.prod.backcrm.enums.StatusName;
@@ -24,6 +25,7 @@ import uz.prod.backcrm.service.abs.ProjectService;
 import uz.prod.backcrm.utills.CommonUtils;
 import uz.prod.backcrm.utills.constants.Message;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -36,7 +38,6 @@ public class ProjectServiceImpl implements ProjectService {
     private final MessageSource messageSource;
     private final UserRepository userRepository;
     private final StatusRepository statusRepository;
-    private final ProjectTypeMapper projectTypeMapper;
     private final ProjectTypeRepository projectTypeRepository;
 
     @Override
@@ -54,21 +55,21 @@ public class ProjectServiceImpl implements ProjectService {
         String message = CommonUtils.createMessage(Message.NOT_FOUND, messageSource, new Object[]{id});
         Project project = projectRepository.findById(id).orElseThrow(
                 () -> RestException.restThrow(message, HttpStatus.BAD_REQUEST));
-        return ApiResult.success(projectMapper.toDTO(project));
+        return ApiResult.success(toDTO(project));
     }
 
     @Override
     public ApiResult<List<ProjectResDTO>> getAllProjects(int page, int size) {
         Pageable pageable = PageRequest.of(page, size);
         Page<Project> projects = projectRepository.findAll(pageable);
-        return ApiResult.success(projectMapper.toDTOList(projects));
+        return ApiResult.success(toDTOList(projects));
     }
 
     @Override
     public ApiResult<List<ProjectResDTO>> getMyProjects(int page, int size) {
         Pageable pageable = PageRequest.of(page, size);
         User user = CommonUtils.getUserFromSecurityContext();
-        return ApiResult.success(projectMapper.toDTOList(projectRepository.findAllByUsers(user, pageable)));
+        return ApiResult.success(toDTOList(projectRepository.findAllByUsers(user, pageable)));
     }
 
     @Override
@@ -110,5 +111,57 @@ public class ProjectServiceImpl implements ProjectService {
         project.setUsers(userRepository.findAllById(userIdList));
         projectRepository.save(project);
         return ApiResult.success(CommonUtils.createMessage(Message.ADDED_SUCCESSFULLY, messageSource, null));
+    }
+
+    public ProjectResDTO toDTO(Project project) {
+        if ( project == null ) {
+            return null;
+        }
+
+        ProjectResDTO.ProjectResDTOBuilder projectResDTO = ProjectResDTO.builder();
+
+        projectResDTO.id( project.getId() );
+        projectResDTO.name( project.getName() );
+        projectResDTO.clientName( project.getClientName() );
+        projectResDTO.clientPhone1( project.getClientPhone1() );
+        projectResDTO.clientPhone2( project.getClientPhone2() );
+        projectResDTO.description( project.getDescription() );
+        projectResDTO.price( project.getPrice() );
+        projectResDTO.status( map( project.getStatus() ) );
+        projectResDTO.dealNumber( project.getDealNumber() );
+        projectResDTO.deadline( project.getDeadline() );
+        projectResDTO.type( map( project.getType() ) );
+
+        return projectResDTO.build();
+    }
+
+
+    public List<ProjectResDTO> toDTOList(Page<Project> projects) {
+        if ( projects == null ) {
+            return null;
+        }
+
+        List<ProjectResDTO> list = new ArrayList<ProjectResDTO>();
+        for ( Project project : projects ) {
+            list.add( toDTO( project ) );
+        }
+
+        return list;
+    }
+
+    public String map(ProjectType value) {
+        if ( value == null ) {
+            return null;
+        }
+
+        return String.valueOf(value.getName());
+    }
+
+    public String map(Status value) {
+        if ( value == null ) {
+            return null;
+        }
+
+        return String.valueOf(value.getName());
     }
 }
