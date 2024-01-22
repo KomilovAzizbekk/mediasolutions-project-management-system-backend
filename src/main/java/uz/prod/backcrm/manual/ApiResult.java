@@ -22,21 +22,29 @@ public class ApiResult<T> {
 
     private List<ErrorData> errors;
 
-    //RESPONSE FAQAT 1 TA BOOLEANDAN IBORAT BO'LSA
-    private ApiResult(Boolean success){
+    private Long totalElements;
+
+    //RESPONSE FAQAT BITTA BOOLEANDAN IBORAT BO'LSA
+    private ApiResult(Boolean success) {
         this.success = success;
     }
 
     //SUCCESS RESPONSE WITH DATA
-    private ApiResult(T data, Boolean success) {
+    private ApiResult(Boolean success, T data) {
+        this.success = success;
+        this.data = data;
+    }
+
+    private ApiResult(T data, Boolean success, Long totalElements) {
         this.data = data;
         this.success = success;
+        this.totalElements = totalElements;
     }
 
     //SUCCESS RESPONSE WITH MESSAGE
     private ApiResult(String message) {
-        this.message = message;
         this.success = Boolean.TRUE;
+        this.message = message;
     }
 
     //ERROR RESPONSE WITH MESSAGE AND ERROR CODE
@@ -53,10 +61,13 @@ public class ApiResult<T> {
     }
 
     public static <E> ApiResult<E> success(E data) {
-        return new ApiResult<>(data,true);
+        return new ApiResult<>(true, data);
+    }
+    public static <E> ApiResult<E> successPageable(E data, Long totalElements) {
+        return new ApiResult<>(data, true, totalElements);
     }
     public static <E> ApiResult<E> success(E data, boolean notMessage) {
-        return new ApiResult<>(data, true);
+        return new ApiResult<>(true, data);
     }
 
     public static <E> ApiResult<E> success() {
@@ -68,11 +79,10 @@ public class ApiResult<T> {
     }
 
     public static ApiResult<ErrorData> error(List<ErrorData> errors) {
-        return new ApiResult<>(errors);
+        return new ApiResult<>(String.valueOf(errors));
     }
 
     public static ApiResult<ErrorData> error(String errorMsg, Integer errorCode) {
         return new ApiResult<>(errorMsg, errorCode);
     }
-
 }

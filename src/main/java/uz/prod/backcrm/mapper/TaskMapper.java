@@ -12,10 +12,7 @@ public interface TaskMapper {
 
     TaskResDTO toDTO(Task task);
 
-    Task toEntity(TaskResDTO dto);
-
     List<TaskResDTO> toDTOList(Page<Task> tasks);
 
-    List<Task> toEntityList(List<TaskResDTO> taskDTOList);
 
 }

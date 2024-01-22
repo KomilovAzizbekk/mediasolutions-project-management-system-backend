@@ -33,7 +33,7 @@ public class ProjectResDTO {
 
     private String dealNumber;
 
-    private LocalDate deadline;
+    private String deadline;
 
     private String type;
 

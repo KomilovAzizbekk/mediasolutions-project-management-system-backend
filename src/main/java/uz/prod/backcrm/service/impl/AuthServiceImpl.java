@@ -109,7 +109,7 @@ public class AuthServiceImpl implements AuthService, UserDetailsService {
     private void usernameNotFoundThrow(String username){
         String message = CommonUtils.createMessage(Message.USERNAME_NOT_FOUND, messageSource, new Object[]{username});
         if (!userRepository.existsByUsername(username)) {
-            throw RestException.restThrow(message, HttpStatus.UNAUTHORIZED);
+            throw RestException.restThrow(message, HttpStatus.BAD_REQUEST);
         }
     }
 

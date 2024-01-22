@@ -40,28 +40,37 @@ public class UserServiceImpl implements UserService {
     @Override
     public ApiResult<List<UserDTO>> getAllUsersOrAdmins(boolean areUsers, int page, int size) {
         Pageable pageable = PageRequest.of(page, size);
-        if (areUsers)
-            return ApiResult.success(userMapper.toDTOList(userRepository.findAllUsers(pageable)));
-        else
-            return ApiResult.success(userMapper.toDTOList(userRepository.findAllAdmins(pageable)));
+        if (areUsers) {
+            Page<User> allUsers = userRepository.findAllUsers(pageable);
+            return ApiResult.successPageable(userMapper.toDTOList(allUsers), allUsers.getTotalElements());
+        } else {
+            Page<User> allAdmins = userRepository.findAllAdmins(pageable);
+            return ApiResult.successPageable(userMapper.toDTOList(allAdmins), allAdmins.getTotalElements());
+        }
     }
 
     @Override
     public ApiResult<List<UserDTO>> getBlockedUsersOrAdmins(boolean areUsers, int page, int size) {
         Pageable pageable = PageRequest.of(page, size);
-        if (areUsers)
-            return ApiResult.success(userMapper.toDTOList(userRepository.findAllByAccountNonLockedIsFalseAndRoleIdNot(pageable, 1L)));
-        else
-            return ApiResult.success(userMapper.toDTOList(userRepository.findAllByAccountNonLockedIsFalseAndRoleId(pageable, 1L)));
+        if (areUsers) {
+            Page<User> users = userRepository.findAllByAccountNonLockedIsFalseAndRoleIdNot(pageable, 1L);
+            return ApiResult.successPageable(userMapper.toDTOList(users), users.getTotalElements());
+        } else {
+            Page<User> admins = userRepository.findAllByAccountNonLockedIsFalseAndRoleId(pageable, 1L);
+            return ApiResult.successPageable(userMapper.toDTOList(admins), admins.getTotalElements());
+        }
     }
 
     @Override
     public ApiResult<List<UserDTO>> getActiveUsersOrAdmins(boolean areUsers, int page, int size) {
         Pageable pageable = PageRequest.of(page, size);
-        if (areUsers)
-            return ApiResult.success(userMapper.toDTOList(userRepository.findAllByAccountNonLockedIsTrueAndRoleIdNot(pageable, 1L)));
-        else
-            return ApiResult.success(userMapper.toDTOList(userRepository.findAllByAccountNonLockedIsTrueAndRoleId(pageable, 1L)));
+        if (areUsers) {
+            Page<User> users = userRepository.findAllByAccountNonLockedIsTrueAndRoleIdNot(pageable, 1L);
+            return ApiResult.successPageable(userMapper.toDTOList(users), users.getTotalElements());
+        } else {
+            Page<User> admins = userRepository.findAllByAccountNonLockedIsTrueAndRoleId(pageable, 1L);
+            return ApiResult.successPageable(userMapper.toDTOList(admins), admins.getTotalElements());
+        }
     }
 
     @Override
@@ -141,7 +150,7 @@ public class UserServiceImpl implements UserService {
     public ApiResult<List<UserDTO>> getUsersByProjectId(int page, int size, UUID id) {
         Pageable pageable = PageRequest.of(page, size);
         Page<User> users = userRepository.findAllByProjectId(pageable, id);
-        return ApiResult.success(userMapper.toDTOList(users));
+        return ApiResult.successPageable(userMapper.toDTOList(users), users.getTotalElements());
     }
 
 }

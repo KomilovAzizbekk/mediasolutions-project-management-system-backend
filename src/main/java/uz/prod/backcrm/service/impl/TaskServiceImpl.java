@@ -42,6 +42,7 @@ public class TaskServiceImpl implements TaskService {
     private final ProjectRepository projectRepository;
 
     private final AttachmentMapper attachmentMapper;
+
     private final AttachmentRepository attachmentRepository;
 
     private final StatusRepository statusRepository;
@@ -60,14 +61,15 @@ public class TaskServiceImpl implements TaskService {
     public ApiResult<List<TaskResDTO>> getAllTasksByProjectId(UUID id, int page, int size) {
         Pageable pageable = PageRequest.of(page, size);
         Page<Task> taskList = taskRepository.getAllByProjectId(id, pageable);
-        return ApiResult.success(taskMapper.toDTOList(taskList));
+        return ApiResult.successPageable(taskMapper.toDTOList(taskList), taskList.getTotalElements());
     }
 
     @Override
     public ApiResult<List<TaskResDTO>> getAllMyTasks(int page, int size) {
         User user = CommonUtils.getUserFromSecurityContext();
         Pageable pageable = PageRequest.of(page, size);
-        return ApiResult.success(taskMapper.toDTOList(taskRepository.findAllByUsers(user, pageable)));
+        Page<Task> tasks = taskRepository.findAllByUsers(user, pageable);
+        return ApiResult.successPageable(taskMapper.toDTOList(tasks), tasks.getTotalElements());
     }
 
     @Override
@@ -129,7 +131,7 @@ public class TaskServiceImpl implements TaskService {
     public ApiResult<List<TaskResDTO>> getPending(int page, int size) {
         Pageable pageable = PageRequest.of(page, size);
         Page<Task> status = taskRepository.findAllByStatusId(pageable, 5L);
-        return ApiResult.success(taskMapper.toDTOList(status));
+        return ApiResult.successPageable(taskMapper.toDTOList(status), status.getTotalElements());
     }
 
     @Override

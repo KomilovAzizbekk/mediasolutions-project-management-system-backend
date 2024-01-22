@@ -5,7 +5,6 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.time.LocalDate;
 import java.util.List;
 import java.util.UUID;
 
@@ -23,7 +22,7 @@ public class TaskResDTO {
 
     private List<UserDTO> users;
 
-    private LocalDate deadline;
+    private String deadline;
 
     private List<AttachmentDTO> attachments;
 

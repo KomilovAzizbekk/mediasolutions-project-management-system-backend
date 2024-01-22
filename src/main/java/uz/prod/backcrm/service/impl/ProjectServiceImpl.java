@@ -25,6 +25,8 @@ import uz.prod.backcrm.service.abs.ProjectService;
 import uz.prod.backcrm.utills.CommonUtils;
 import uz.prod.backcrm.utills.constants.Message;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -62,14 +64,15 @@ public class ProjectServiceImpl implements ProjectService {
     public ApiResult<List<ProjectResDTO>> getAllProjects(int page, int size) {
         Pageable pageable = PageRequest.of(page, size);
         Page<Project> projects = projectRepository.findAll(pageable);
-        return ApiResult.success(toDTOList(projects));
+        return ApiResult.successPageable(toDTOList(projects), projects.getTotalElements());
     }
 
     @Override
     public ApiResult<List<ProjectResDTO>> getMyProjects(int page, int size) {
         Pageable pageable = PageRequest.of(page, size);
         User user = CommonUtils.getUserFromSecurityContext();
-        return ApiResult.success(toDTOList(projectRepository.findAllByUsers(user, pageable)));
+        Page<Project> projects = projectRepository.findAllByUsers(user, pageable);
+        return ApiResult.successPageable(toDTOList(projects), projects.getTotalElements());
     }
 
     @Override
@@ -78,7 +81,7 @@ public class ProjectServiceImpl implements ProjectService {
         Project project = projectRepository.findById(id).orElseThrow(
                 () -> RestException.restThrow(message, HttpStatus.BAD_REQUEST));
         project.setName(dto.getName());
-        project.setDeadline(dto.getDeadline());
+        project.setDeadline(LocalDate.parse(dto.getDeadline()));
         project.setDealNumber(dto.getDealNumber());
         project.setDescription(dto.getDescription());
         project.setPrice(dto.getPrice());
@@ -129,7 +132,7 @@ public class ProjectServiceImpl implements ProjectService {
         projectResDTO.price( project.getPrice() );
         projectResDTO.status( map( project.getStatus() ) );
         projectResDTO.dealNumber( project.getDealNumber() );
-        projectResDTO.deadline( project.getDeadline() );
+        projectResDTO.deadline( project.getDeadline().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")) );
         projectResDTO.type( map( project.getType() ) );
 
         return projectResDTO.build();

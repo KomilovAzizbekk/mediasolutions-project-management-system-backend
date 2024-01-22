@@ -5,7 +5,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.hibernate.exception.ConstraintViolationException;
 import org.springframework.beans.ConversionNotSupportedException;
 import org.springframework.beans.TypeMismatchException;
-import org.springframework.context.MessageSource;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -29,10 +28,7 @@ import org.springframework.web.servlet.NoHandlerFoundException;
 import uz.prod.backcrm.component.MessageService;
 import uz.prod.backcrm.manual.ApiResult;
 import uz.prod.backcrm.manual.ErrorData;
-import uz.prod.backcrm.utills.CommonUtils;
-import uz.prod.backcrm.utills.constants.Message;
 import uz.prod.backcrm.utills.constants.Rest;
-
 
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -47,7 +43,6 @@ public class ExceptionHelper {
     private static final String NOT_FOUND = "_NOT_FOUND";
     private static final String NOT_NULL = "_NOT_NULL";
     private static final String UK_CONSTRAINT = "_UK_CONSTRAINT";
-    private final MessageSource messageSource;
 
     @ExceptionHandler(value = {MethodArgumentNotValidException.class})
     public ResponseEntity<ApiResult<ErrorData>> handleException(MethodArgumentNotValidException ex) {
@@ -129,17 +124,16 @@ public class ExceptionHelper {
 
     @ExceptionHandler(value = {AccessDeniedException.class})
     public ResponseEntity<ApiResult<ErrorData>> handleExceptionAccessDenied() {
-        String message = CommonUtils.createMessage(Message.FORBIDDEN_EXCEPTION, messageSource, null);
         return new ResponseEntity<>(
-                ApiResult.error(message, Rest.ACCESS_DENIED),
+                ApiResult.error(MessageService.getMessage("FORBIDDEN_EXCEPTION"), Rest.ACCESS_DENIED),
                 HttpStatus.FORBIDDEN);
     }
 
 
     @ExceptionHandler(value = {MissingPathVariableException.class})
     public ResponseEntity<ApiResult<ErrorData>> handleExceptionNotFound() {
-        String message = CommonUtils.createMessage(Message.PATH_NOT_FOUND_EXCEPTION, messageSource, null);
-        return new ResponseEntity<>(ApiResult.error(message, Rest.NOT_FOUND),
+        return new ResponseEntity<>(
+                ApiResult.error(MessageService.getMessage("PATH_NOTFOUND_EXCEPTION"), Rest.NOT_FOUND),
                 HttpStatus.NOT_FOUND);
     }
 
@@ -195,12 +189,11 @@ public class ExceptionHelper {
 
     @ExceptionHandler(value = {Exception.class})
     public ResponseEntity<ApiResult<ErrorData>> handleException(Exception ex) {
-        String message = CommonUtils.createMessage(Message.SERVER_ERROR, messageSource, null);
         log.error("EXCEPTION_HELPER:", ex);
         ex.printStackTrace();
         return new ResponseEntity<>(
                 ApiResult.error(
-                        message,
+                        MessageService.getMessage("ERROR_IN_SERVER"),
                         Rest.SERVER_ERROR),
                 HttpStatus.INTERNAL_SERVER_ERROR);
     }

@@ -46,6 +46,6 @@ public class PaymentServiceImpl implements PaymentService {
     public ApiResult<List<PaymentDTO>> getByProjectId(int page, int size, UUID id) {
         Pageable pageable = PageRequest.of(page, size);
         Page<Payments> payments = paymentsRepository.findAllByProjectId(pageable, id);
-        return ApiResult.success(paymentMapper.toDTOList(payments));
+        return ApiResult.successPageable(paymentMapper.toDTOList(payments), payments.getTotalElements());
     }
 }
