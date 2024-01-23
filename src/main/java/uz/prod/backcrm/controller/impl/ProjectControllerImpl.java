@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.RestController;
 import uz.prod.backcrm.controller.abs.ProjectController;
 import uz.prod.backcrm.manual.ApiResult;
+import uz.prod.backcrm.payload.ProjectReqDTO;
 import uz.prod.backcrm.payload.ProjectResDTO;
 import uz.prod.backcrm.service.abs.ProjectService;
 
@@ -32,7 +33,7 @@ public class ProjectControllerImpl implements ProjectController {
     }
 
     @Override
-    public ApiResult<?> addProject(ProjectResDTO projectDTO) {
+    public ApiResult<?> addProject(ProjectReqDTO projectDTO) {
         return projectService.addProject(projectDTO);
     }
 
@@ -42,7 +43,7 @@ public class ProjectControllerImpl implements ProjectController {
     }
 
     @Override
-    public ApiResult<?> editProject(UUID id, ProjectResDTO projectDTO) {
+    public ApiResult<?> editProject(UUID id, ProjectReqDTO projectDTO) {
         return projectService.editProject(id, projectDTO);
     }
 

@@ -3,6 +3,7 @@ package uz.prod.backcrm.controller.abs;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import uz.prod.backcrm.manual.ApiResult;
+import uz.prod.backcrm.payload.ProjectReqDTO;
 import uz.prod.backcrm.payload.ProjectResDTO;
 import uz.prod.backcrm.utills.constants.Rest;
 
@@ -43,7 +44,7 @@ public interface ProjectController {
 
     @PostMapping(ADD)
     @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_PM')")
-    ApiResult<?> addProject(@Valid @RequestBody ProjectResDTO projectDTO);
+    ApiResult<?> addProject(@Valid @RequestBody ProjectReqDTO projectDTO);
 
     @PostMapping(ADD_USER_TO_PROJECT)
     @PreAuthorize("hasRole('ROLE_ADMIN')")
@@ -51,7 +52,7 @@ public interface ProjectController {
 
     @PutMapping(EDIT)
     @PreAuthorize("hasRole('ROLE_ADMIN')")
-    ApiResult<?> editProject(@PathVariable UUID id, @Valid @RequestBody ProjectResDTO projectDTO);
+    ApiResult<?> editProject(@PathVariable UUID id, @Valid @RequestBody ProjectReqDTO projectDTO);
 
     @DeleteMapping(DELETE)
     @PreAuthorize("hasRole('ROLE_ADMIN')")

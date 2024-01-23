@@ -16,6 +16,7 @@ import uz.prod.backcrm.enums.StatusName;
 import uz.prod.backcrm.exceptions.RestException;
 import uz.prod.backcrm.manual.ApiResult;
 import uz.prod.backcrm.mapper.*;
+import uz.prod.backcrm.payload.ProjectReqDTO;
 import uz.prod.backcrm.payload.ProjectResDTO;
 import uz.prod.backcrm.repository.ProjectRepository;
 import uz.prod.backcrm.repository.ProjectTypeRepository;
@@ -43,7 +44,7 @@ public class ProjectServiceImpl implements ProjectService {
     private final ProjectTypeRepository projectTypeRepository;
 
     @Override
-    public ApiResult<?> addProject(ProjectResDTO projectDTO) {
+    public ApiResult<?> addProject(ProjectReqDTO projectDTO) {
         Project project = projectMapper.toEntity(projectDTO);
         project.setStatus(statusRepository.findByName(StatusName.CREATED));
         ProjectType projectType = projectTypeRepository.findByName(ProjectTypeName.valueOf(projectDTO.getType()));
@@ -76,12 +77,12 @@ public class ProjectServiceImpl implements ProjectService {
     }
 
     @Override
-    public ApiResult<?> editProject(UUID id, ProjectResDTO dto) {
+    public ApiResult<?> editProject(UUID id, ProjectReqDTO dto) {
         String message = CommonUtils.createMessage(Message.NOT_FOUND, messageSource, new Object[]{id});
         Project project = projectRepository.findById(id).orElseThrow(
                 () -> RestException.restThrow(message, HttpStatus.BAD_REQUEST));
         project.setName(dto.getName());
-        project.setDeadline(LocalDate.parse(dto.getDeadline()));
+        project.setDeadline(dto.getDeadline());
         project.setDealNumber(dto.getDealNumber());
         project.setDescription(dto.getDescription());
         project.setPrice(dto.getPrice());

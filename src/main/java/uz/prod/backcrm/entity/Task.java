@@ -32,7 +32,7 @@ public class Task extends AbsUUID {
     private Status status;
 
     //RESPONSIBLE USERS
-    @OneToMany(fetch = FetchType.LAZY)
+    @ManyToMany(fetch = FetchType.LAZY)
     private List<User> users;
 
     @Column(name = "deadline")
